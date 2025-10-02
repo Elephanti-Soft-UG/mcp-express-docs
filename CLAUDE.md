@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a documentation project using **Docsify** to serve static documentation for the 'MCP Express'.
+This is a documentation project using **Docsify** to serve static documentation for **MCP Express**.
+
+**MCP Express** is a platform that allows users to quickly create MCP (Model Context Protocol) servers based on existing tools and APIs. It provides an intuitive interface for integrating various data sources and services, enabling users to build custom MCP servers without extensive coding. The platform supports multiple integration types including REST APIs, databases like MySQL, and other services, making it easy to connect AI models to real-world data and functionality.
 
 ## Architecture
 

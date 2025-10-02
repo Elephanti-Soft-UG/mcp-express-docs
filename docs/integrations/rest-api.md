@@ -1,6 +1,6 @@
 # REST API Integration
 
-Connect your MCP server to RESTful web services to create tools that can interact with external APIs. This integration allows you to make HTTP requests to any REST API and use the responses in your MCP tools.
+Integrate RESTful web services to create tools that can interact with external APIs. This integration allows you to make HTTP requests to any REST API and use the responses in your MCP tools.
 
 ## Configuration
 
