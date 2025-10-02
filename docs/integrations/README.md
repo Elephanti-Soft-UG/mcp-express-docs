@@ -2,6 +2,9 @@
 
 Integrations are the backbone of MCP Express, allowing you to connect your MCP servers to existing data sources and APIs. Each integration type provides specific configuration options and capabilities.
 
+## Available Integrations
+The list of available integrations can be seen within the `/docs/integrations` folder. They have not been listed here to keep this document short.
+
 ## How Integrations Work
 
 1. **Configuration**: Each integration requires specific connection details (credentials, endpoints, etc.)

@@ -5,3 +5,4 @@
 - **Integrations**
   - [Overview](/integrations/)
   - [REST API](/integrations/rest-api)
+  - [MySQL](/integrations/mysql)
