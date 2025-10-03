@@ -63,9 +63,12 @@ mcp-express-docs/
 When adding a new integration to the documentation:
 
 1. **Create the integration documentation file**:
+   - Use the `INTEGRATION_TEMPLATE.md` file in the root directory as a starting point
+   - Copy the template and fill in all placeholders (marked with `[...]`) with integration-specific content
+   - Save the file as `docs/integrations/new-integration.md`
    ```bash
-   # Create a new markdown file in docs/integrations/
-   touch docs/integrations/new-integration.md
+   # Copy the template to create a new integration file
+   cp INTEGRATION_TEMPLATE.md docs/integrations/new-integration.md
    ```
 
 2. **Add the integration to the sidebar navigation**:

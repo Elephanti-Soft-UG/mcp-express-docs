@@ -6,3 +6,5 @@
   - [Overview](/integrations/)
   - [REST API](/integrations/rest-api)
   - [MySQL](/integrations/mysql)
+  - [PostgreSQL](/integrations/postgresql)
+  - [MSSQL](/integrations/mssql)
