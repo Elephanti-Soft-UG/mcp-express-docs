@@ -8,3 +8,4 @@
   - [MySQL](/integrations/mysql)
   - [PostgreSQL](/integrations/postgresql)
   - [MSSQL](/integrations/mssql)
+  - [DynamoDB](/integrations/dynamodb)

@@ -113,6 +113,15 @@ Each integration should follow this structure:
 - **Best Practices**: Security and performance recommendations
 - **Troubleshooting**: Common issues and solutions
 
+### Important Documentation Guidelines
+
+**No JSON Configurations in Customer-Facing Documentation:**
+- Customer-facing integration documentation should NOT include JSON configuration examples
+- Customers interact with MCP Express through the UI, not JSON files
+- Use screenshots/images to demonstrate configuration instead
+- Explain configuration options using plain text and tables
+- Only use code blocks for actual code examples (e.g., SQL queries, API responses), never for configuration
+
 ## Key Notes
 
 - No build process required - Docsify renders markdown at runtime
