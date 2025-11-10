@@ -43,7 +43,8 @@ Variables from tool inputs can be referenced using `{{ variable_name }}` syntax:
 
 For all examples below, we assume the tool accepts the following input parameters based on the input schema:
 
-![CloudWatch Input](images/cloudwatch-input.png)
+![Example CloudWatch Input](images/cloudwatch-input.png)
+
 - `functionName` (string): Function name of log group
 - `startTime` (string): Start time of logs
 - `endTime` (string): End time of logs
