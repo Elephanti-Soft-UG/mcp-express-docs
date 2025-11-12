@@ -1,18 +1,18 @@
-Integrate MCP Express with AWS CloudWatch to build custom tools that can seamlessly query and interact with your log data. This powerful integration enables you to execute flexible log queries against your CloudWatch log groups, retrieve relevant log entries, and analyze application behavior and system events.
+Integrate MCP Express with AWS CloudWatch to build custom tools that can seamlessly query and interact with your log data. This powerful integration enables you to execute flexible log queries against your CloudWatch log groups, retrieve relevant log entries, and use the results in your MCP tools..
 
 ## Configuration
 
 ### Connection Parameters
 
-|Parameter|Required|Description|
-|---|:-:|---|
-|Region|Yes|AWS region where your CloudWatch logs are stored (e.g., us-east-1, eu-west-1)|
-|AWS Access Key|Yes|AWS access key ID for authentication|
-|AWS Secret Key|Yes|AWS secret access key for authentication|
-|Log Group|Yes|The log group name to search logs in (supports templating)|
-|Start Time|Yes|ISO Time UTC to start the search from (supports templating)|
-|End Time|Yes|ISO Time UTC till when the logs are searched (supports templating)|
-|Query|Yes|CloudWatch Insights query to search and filter logs (supports templating)|
+| Parameter      | Required | Description                                                                               |
+| -------------- | :------: | ----------------------------------------------------------------------------------------- |
+| Region         |   Yes    | AWS region where your CloudWatch logs are stored (e.g., us-east-1, eu-west-1)            |
+| AWS Access Key |   Yes    | AWS access key ID for authentication                                                      |
+| AWS Secret Key |   Yes    | AWS secret access key for authentication                                                  |
+| Log Group      |   Yes    | The log group name to search logs in (supports templating)                               |
+| Start Time     |   Yes    | ISO Time UTC to start the search from (supports templating)                              |
+| End Time       |   Yes    | ISO Time UTC till when the logs are searched (supports templating)                       |
+| Query          |   Yes    | CloudWatch Insights query to search and filter logs (supports templating)                |
 
 ### Setting Up CloudWatch Integration
 
@@ -25,6 +25,7 @@ Integrate MCP Express with AWS CloudWatch to build custom tools that can seamles
 7. **Test Connection**: Use the built-in connection test to verify your setup works correctly
 
 ![CloudWatch Configuration](images/cloudwatch-config.png)
+
 ### Query Templates
 
 The CloudWatch integration uses templating to create dynamic log queries based on tool inputs. This allows you to safely parameterize your log searches while maintaining flexibility. Multiple fields support templating: Log Group, Start Time, End Time, and Query.
@@ -55,13 +56,11 @@ For all examples below, we assume the tool accepts the following input parameter
 The CloudWatch integration can execute fixed queries, useful for monitoring specific log groups. For example, searching for errors in a specific Lambda function:
 
 **Log Group:**
-
 ```
 /aws/lambda/my-production-function
 ```
 
 **Query:**
-
 ```
 fields @timestamp, @message
 | filter @message like /ERROR/
@@ -70,13 +69,11 @@ fields @timestamp, @message
 ```
 
 **Start Time:**
-
 ```
 2025-11-10T00:00:00Z
 ```
 
 **End Time:**
-
 ```
 2025-11-10T23:59:59Z
 ```
@@ -86,30 +83,63 @@ fields @timestamp, @message
 The CloudWatch integration supports parameterized queries that accept user input. For example, searching logs for a specific function name and time range:
 
 **Log Group:**
-
 ```
 /aws/lambda/{{functionName}}
 ```
 
-**Query:**
+**Start Time:**
+```
+{{startTime}}
+```
 
+**End Time:**
+```
+{{endTime}}
+```
+
+**Query:**
 ```
 fields @timestamp, @message, @logStream
 | sort @timestamp desc
 | limit {{limit}}
 ```
 
-**Start Time:**
+#### Advanced CloudWatch Insights Queries
 
+The integration supports complex CloudWatch Insights query syntax for sophisticated log analysis:
+
+**Query:**
 ```
-{{startTime}}
+fields @timestamp, @message, @requestId, @duration, @billedDuration, @memorySize
+| filter @type = "REPORT"
+| stats avg(@duration), max(@duration), min(@duration) by bin(5m)
 ```
 
-**End Time:**
+## CloudWatch Logs Insights Query Syntax
 
-```
-{{endTime}}
-```
+For detailed information about writing CloudWatch Logs Insights queries, refer to the official AWS documentation:
+
+- **[CloudWatch Logs Insights Query Syntax](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html)** - Complete reference for query commands, functions, and operators
+- **[Sample Queries](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax-examples.html)** - Real-world query examples for common scenarios
+- **[Supported Log Fields](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_AnalyzeLogData-discoverable-fields.html)** - Documentation of discoverable fields in different AWS services
+
+### Common Query Commands
+
+- `fields` - Select specific fields to display in results
+- `filter` - Filter log events based on conditions
+- `stats` - Calculate aggregate statistics
+- `sort` - Sort results by specified fields
+- `limit` - Limit the number of results returned
+- `parse` - Extract data from log fields using patterns
+
+### Useful Query Functions
+
+- `like` - Pattern matching with wildcards
+- `=~` and `!~` - Regular expression matching
+- `avg()`, `sum()`, `min()`, `max()`, `count()` - Aggregation functions
+- `earliest()`, `latest()` - Time-based functions
+
+For comprehensive examples and advanced query techniques, visit the [AWS CloudWatch Logs Insights documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html).
 
 ## Security Features
 
@@ -205,6 +235,20 @@ Analyze system and application performance:
 - Set reasonable timeout values based on expected query complexity
 - Use exponential backoff for retrying failed queries
 - Implement query result pagination for large datasets
+
+## Additional Resources
+
+### AWS Documentation
+
+- **[Amazon CloudWatch Logs User Guide](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/)** - Comprehensive guide to CloudWatch Logs
+- **[IAM Permissions for CloudWatch Logs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/permissions-reference-cwl.html)** - Required IAM permissions reference
+- **[CloudWatch Logs Pricing](https://aws.amazon.com/cloudwatch/pricing/)** - Understanding CloudWatch costs
+- **[CloudWatch Logs Quotas](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/cloudwatch_limits_cwl.html)** - Service limits and quotas
+
+### Useful Tools
+
+- **[AWS CLI for CloudWatch Logs](https://docs.aws.amazon.com/cli/latest/reference/logs/)** - Command-line interface reference
+- **[CloudWatch Logs Insights Tutorial](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_AnalyzeLogData_RunQuery.html)** - Step-by-step tutorial for running queries
 
 ## Troubleshooting
 
