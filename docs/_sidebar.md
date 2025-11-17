@@ -9,3 +9,4 @@
   - [PostgreSQL](/integrations/postgresql)
   - [MSSQL](/integrations/mssql)
   - [DynamoDB](/integrations/dynamodb)
+  - [CloudWatch](/integrations/cloudwatch)
