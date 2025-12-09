@@ -20,7 +20,7 @@ The **Confluence Tool** integrates with Confluence, a collaboration software dev
    In your MCP server dashboard, choose "Confluence" from the available integrations.
 
 2. **Authenticate**:
-   Click the "Authenticate" button to authenticate the app using **OAuth 2.0**. You will be redirected to Confluence for the authorization process.
+   Click the "Connect Confluence" button to authenticate the app using **OAuth 2.0**. You will be redirected to Confluence for the authorization process.
 
 3. **Configure Parameters**:
    Set up the configuration for each subtool (Search, Read, Write) by providing the necessary parameters (e.g., `search_query`, `page_id`, `space_key`).
