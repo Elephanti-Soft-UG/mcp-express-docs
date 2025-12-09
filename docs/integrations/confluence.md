@@ -4,15 +4,15 @@ The **Confluence Tool** integrates with Confluence, a collaboration software dev
 
 ### Connection Parameters
 
-| Parameter      | Required | Description                                                     |
-| -------------- | -------- | --------------------------------------------------------------- |
-| `search_query` | Yes      | The search query used to find content in Confluence.            |
-| `limit`        | Yes      | The maximum number of results to return in the search.          |
-| `page_id`      | Yes      | The ID of the Confluence page to read.                          |
-| `space_key`    | Yes      | The key of the space where the page will be created or updated. |
-| `parent_id`    | Yes      | The ID of the parent page if the page is nested.                |
-| `page_title`   | Yes      | The title of the page to create or update.                      |
-| `page_content` | Yes      | The content of the page to create or update.                    |
+| Parameter      | Required | Description                                                                                                                                        |
+| -------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `search_query` | Yes      | The search query used to find content in Confluence using Confluence Query Language (CQL). CQL allows filtering and sorting by content properties. |
+| `limit`        | Yes      | The maximum number of results to return in the search.                                                                                             |
+| `page_id`      | Yes      | The ID of the Confluence page to read.                                                                                                             |
+| `space_key`    | Yes      | The key of the space where the page will be created or updated.                                                                                    |
+| `parent_id`    | Yes      | The ID of the parent page if the page is nested.                                                                                                   |
+| `page_title`   | Yes      | The title of the page to create or update.                                                                                                         |
+| `page_content` | Yes      | The content of the page to create or update.                                                                                                       |
 
 ### Setting Up Confluence Tool Integration
 
@@ -25,8 +25,7 @@ The **Confluence Tool** integrates with Confluence, a collaboration software dev
 3. **Configure Parameters**:
    Set up the configuration for each subtool (Search, Read, Write) by providing the necessary parameters (e.g., `search_query`, `page_id`, `space_key`).
 
-4. **Test Connection**:
-   Use the built-in connection test to verify that the integration is working correctly with Confluence.
+4. **Test Tool**: Use the built-in **Test Tool** to simulate and verify the integration's functionality with Confluence, ensuring that all actions (search, read, write) are working as expected.
 
 ## OAuth Integration
 
@@ -35,7 +34,7 @@ The Confluence Tool uses **OAuth 2.0** for secure authentication, allowing seaml
 ### Authentication Process
 
 - **Click the "Authenticate" Button**:
-  In the MCP-Express app, click the "Authenticate" button to start the authentication process.
+  In the MCP-Express app, click the "Connect Confluence" button to start the authentication process.
 
 - **Grant Permissions**:
   You will be redirected to Confluence, where you need to grant the app permission to access your Confluence data. This is a one-time process.
@@ -53,10 +52,10 @@ The **Search Tool** allows you to search for Confluence pages based on a query.
 
 **Configuration Parameters**:
 
-| Parameter      | Description                                    |
-| -------------- | ---------------------------------------------- |
-| `search_query` | The search query to use for searching content. |
-| `limit`        | The maximum number of results to return.       |
+| Parameter      | Description                                                                               |
+| -------------- | ----------------------------------------------------------------------------------------- |
+| `search_query` | The search query using Confluence Query Language (CQL) for filtering and sorting content. |
+| `limit`        | The maximum number of results to return.                                                  |
 
 **Example Usage**:
 
@@ -219,7 +218,6 @@ The Confluence Tool uses **OAuth 2.0** for secure authentication, eliminating th
 ### 3. Create and Update Pages
 
 - **Create** new pages or **update** existing pages with dynamic content, titles, and metadata.
-  ![alt text](image.png)
 
 ## Best Practices
 
