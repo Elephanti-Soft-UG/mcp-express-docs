@@ -2,17 +2,11 @@ The **Confluence Tool** integrates with Confluence, a collaboration software dev
 
 ## Configuration
 
-### Connection Parameters
+### Authentication Parameters
 
-| Parameter      | Required | Description                                                                                                                                        |
-| -------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `search_query` | Yes      | The search query used to find content in Confluence using Confluence Query Language (CQL). CQL allows filtering and sorting by content properties. |
-| `limit`        | Yes      | The maximum number of results to return in the search.                                                                                             |
-| `page_id`      | Yes      | The ID of the Confluence page to read.                                                                                                             |
-| `space_key`    | Yes      | The key of the space where the page will be created or updated.                                                                                    |
-| `parent_id`    | Yes      | The ID of the parent page if the page is nested.                                                                                                   |
-| `page_title`   | Yes      | The title of the page to create or update.                                                                                                         |
-| `page_content` | Yes      | The content of the page to create or update.                                                                                                       |
+| Parameter                | Required | Description                         |
+| ------------------------ | -------- | ----------------------------------- |
+| OAuth 2.0 Authentication | Yes      | Secure authentication via OAuth 2.0 |
 
 ### Setting Up Confluence Tool Integration
 
@@ -22,8 +16,8 @@ The **Confluence Tool** integrates with Confluence, a collaboration software dev
 2. **Authenticate**:
    Click the "Connect Confluence" button to authenticate the app using **OAuth 2.0**. You will be redirected to Confluence for the authorization process.
 
-3. **Configure Parameters**:
-   Set up the configuration for each subtool (Search, Read, Write) by providing the necessary parameters (e.g., `search_query`, `page_id`, `space_key`).
+3. **Choose Subtool**:
+   Choose the subtool (Search, Read, Write) you want to use.
 
 4. **Test Tool**: Use the built-in **Test Tool** to simulate and verify the integration's functionality with Confluence, ensuring that all actions (search, read, write) are working as expected.
 
@@ -48,7 +42,10 @@ The Confluence Tool uses **OAuth 2.0** for secure authentication, allowing seaml
 
 ### Search Tool
 
-The **Search Tool** allows you to search for Confluence pages based on a query.
+The Search Tool uses Confluence Query Language (CQL) for powerful content filtering. For detailed CQL syntax, refer to:
+
+- **[CQL Syntax Reference](https://confluence.atlassian.com/doc/confluence-search-syntax-158720.html)** - Complete CQL documentation
+- **[Advanced Searching](https://confluence.atlassian.com/doc/advanced-searching-using-cql-139469.html)** - Advanced search techniques
 
 **Configuration Parameters**:
 
@@ -207,34 +204,85 @@ The Confluence Tool uses **OAuth 2.0** for secure authentication, eliminating th
 
 ## Common Use Cases
 
-### 1. Content Search
+### 1. Knowledge Base Management
 
-- **Search** for specific pages in Confluence based on page title, content type, or other criteria.
+Automate and streamline knowledge base operations:
 
-### 2. Read Content
+- Search for documentation across multiple spaces
+- Retrieve specific pages for reference or analysis
+- Create standardized documentation templates automatically
+- Update existing pages with new information programmatically
 
-- **Read** the content of a specific Confluence page using its page ID.
+### 2. Content Discovery and Search
 
-### 3. Create and Update Pages
+Find relevant content efficiently:
 
-- **Create** new pages or **update** existing pages with dynamic content, titles, and metadata.
+- Search for pages by keywords, authors, or date ranges
+- Filter content by space or content type
+- Locate documentation related to specific projects or features
+- Build custom search interfaces for Confluence content
+
+### 3. Automated Documentation
+
+Generate and maintain documentation programmatically:
+
+- Create release notes automatically from deployment data
+- Generate API documentation from code annotations
+- Update technical specifications based on system changes
+- Maintain synchronized documentation across multiple pages
+
+### 4. Content Migration and Synchronization
+
+Manage content across Confluence instances or external systems:
+
+- Read pages from one space and create them in another
+- Synchronize documentation between different systems
+- Archive or duplicate content programmatically
+- Bulk update pages with consistent formatting or structure
 
 ## Best Practices
 
 ### Security
 
-- **Use OAuth 2.0** for secure authentication and avoid managing raw credentials.
-- **Set minimal permissions** for OAuth applications to ensure least privilege access.
+- Always use OAuth 2.0 for authentication rather than API tokens or passwords
+- Grant only the minimum required permissions to the integration
+- Regularly audit which spaces and pages the integration has access to
+- Monitor OAuth token expiration and set up automatic refresh mechanisms
+- Revoke integration access immediately if security is compromised
+- Use Confluence's audit logs to track integration activity
 
 ### Performance
 
-- **Limit the results** in search queries to avoid fetching excessive data using the `limit` parameter.
-- Regularly test and **optimize your queries** to ensure optimal performance.
+- Use specific CQL queries to limit result sets and reduce processing time
+- Always set reasonable limit values in search queries to prevent excessive data retrieval
+- Cache frequently accessed page content to reduce API calls
+- Use space-specific searches rather than global searches when possible
+- Optimize CQL queries by filtering on indexed fields (type, space, title)
+- Monitor API rate limits and implement backoff strategies
 
 ### Reliability
 
-- **Monitor token expiration** and set up automatic refresh mechanisms to prevent service disruptions.
-- Implement **error handling** for network issues or invalid API responses.
+- Implement proper error handling for network failures and API errors
+- Set up automatic OAuth token refresh to prevent authentication failures
+- Test all configurations thoroughly before deploying to production
+- Monitor integration health and set up alerts for failures
+- Use retry logic with exponential backoff for transient failures
+- Validate input parameters before sending requests to Confluence
+
+### Content Management
+
+- Use clear, descriptive page titles and content structure
+- Leverage parent-child page relationships for organized content hierarchy
+- Include metadata and labels for better searchability
+- Follow consistent naming conventions for spaces and pages
+- Document template variables and their expected formats
+- Version control your integration configurations
+
+## Additional Resources
+
+- **[Getting Started with Confluence](https://support.atlassian.com/confluence-cloud/resources/)** - Official Confluence user guide and tutorials
+- **[CQL Search Syntax](https://confluence.atlassian.com/doc/confluence-search-syntax-158720.html)** - Learn how to write powerful search queries
+- **[Creating and Editing Pages](https://support.atlassian.com/confluence-cloud/docs/create-and-edit-pages/)** - Guide to creating and managing pages
 
 ## Troubleshooting
 
@@ -242,13 +290,31 @@ The Confluence Tool uses **OAuth 2.0** for secure authentication, eliminating th
 
 - Ensure that the OAuth authentication process was completed successfully.
 - If authentication fails, try re-authenticating by clicking the "Authenticate" button again.
+- Confirm the Confluence instance URL is correct and accessible
+- Check Confluence admin settings to ensure OAuth apps are allowed
 
 ### Search Tool Issues
 
 - If no results are returned, double-check the **search query syntax**.
 - Ensure that the **limit** parameter is set appropriately to prevent overly broad queries.
+- Test your CQL query directly in Confluence to isolate syntax errors
+- Check if content exists in the specified spaces and matches your query criteria
 
-### Read/Write Tool Issues
+### Read Tool Issues
 
-- If you cannot read or write a page, verify the **page ID** or **space key**, and ensure you have the required permissions to access or modify the page.
-- If content isn’t updating as expected, check the **API response** for any errors or warnings.
+- Confirm the page_id is correct and the page exists in Confluence
+- Verify you have read permissions for the specified page
+- Check if the page is in a restricted space that requires additional permissions
+- Ensure the page hasn't been deleted or moved to a different space
+- Try accessing the page directly in Confluence to confirm it's accessible
+- Check if template variables are being replaced correctly with valid page IDs
+
+### Write Tool Issues
+
+- Verify you have write permissions for the target space
+- Confirm the space_key exists and is spelled correctly
+- Check if the parent_id (if provided) is valid and accessible
+- Ensure page content format is valid (HTML or storage format)
+- Verify that required fields are all provided
+- Check Confluence space permissions to ensure the OAuth user can create/edit pages
+- Review the API response for specific error messages about content validation
