@@ -1,0 +1,3 @@
+# PostgreSQL - Query Editor
+
+WIP
