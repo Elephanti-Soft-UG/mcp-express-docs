@@ -5,8 +5,8 @@ Get your first MCP server up and running in 5 minutes!
 
 - **MCP Express Account** – [Sign up free](https://app.mcp-express.com/signup) - no credit card required
 - **MCP-Compatible AI** – Example: [Claude Desktop](https://code.claude.com/docs/en/desktop)
-- [**Node.js**](https://nodejs.org/en/download) – To check if node is installed, run: `node --version`
-- **PostgreSQL database** – have your connection details handy
+- [**Node.js**](https://nodejs.org/en/download) – Verify your environment by running `node --version`
+- **PostgreSQL database** – Ensure you have your connection string accessible.
 
 **Time required:** 5 minutes
 
@@ -16,14 +16,14 @@ Get your first MCP server up and running in 5 minutes!
 
 ---
 
-## Connect to PostgreSQL
+## Create your First Tool
 
-1. **Create a server** with a name and description.  *(Helps you identify what the server is for.)*
-2. Inside your server, click **Add Tool**.
-3. Select **PostgreSQL** from the tools list.
-4. Through **Quick Connect**, paste your PostgreSQL connection string.  *(Inserts all necessary values automatically.)*
-5. **Insert the [queries](https://docs.mcp-express.com/#/integrations/postgresql/query-editor)** you want your AI agent to execute.
-6. **Give your tool a descriptive name and description.**  *(Your AI agent uses this information to determine when to invoke the tool during interactions.)*
+1. **Create a Server**: Select the `+ New MCP Server` button in your dashboard header. Enter a name and description to ensure clear resource mapping across your infrastructure.
+1. **Add Tool**: Within your new server view, select `Add Tool` to begin extending your agent's capabilities.
+1. **Select Integration**: Choose `PostgreSQL` from the integration library.
+1. **Quick Connect**: Paste your PostgreSQL connection string. We will automatically populate the configuration parameters for you.
+1. **Define Operations**: [Insert the SQL queries](https://docs.mcp-express.com/#/integrations/postgresql/query-editor) you want your AI agent to execute.
+1. **Metadata Assignment**: Provide a precise name and description for the tool. You will empower your AI agent to intelligently determine when to invoke this operation during a live session.
 
 > For more details, see the [PostgreSQL documentation](https://docs.mcp-express.com/#/integrations/postgresql).
 
@@ -31,32 +31,31 @@ Get your first MCP server up and running in 5 minutes!
 
 ## Connect Your AI Agent
 
-1. Create a new client.
-2. Start talking with your PostgreSQL using natural language.
+1. **Provision a Client**: Create a new client within the dashboard.
+1. **Query your Data**: You'll now be able to interact with your PostgreSQL instance using natural language, eliminating the need for manual context-switching.
 
 ![Claude Answering Queries](./images/claude_answering_user_queries_quick-start-guide.gif)  
 
    See detailed articles on how to work with your AI Agent:
-
    - [Connect Claude with your MCP Server (Detailed Article)](https://www.mcp-express.com/blogs/create-and-connect-mcp-server-with-claude-under-5-minutes/)
 
-**Congratulations!** You can now directly talk with your database.  
-Try asking:  
-- `"What tables are in my database?"` – to list your actual tables  
+**Congratulations!** You have successfully democratized your database access.
+
+**Try these prompts to test your new flow state:**
+- `"Analyze the schema of my connected database."`
 - `"What is the …?"` – to explore your data  
 
 
-> Your AI Agent has restricted access to only the parts you configured.  
-> The example questions above may result in access errors if those operations aren’t permitted.  
+> Note on Governance: Your AI Agent operates within the specific access parameters you configured. If an operation is restricted, you will receive a permission error to ensure data integrity.
 <!-- > Refer to our documentation on [how to control your access](#). -->
 
 ---
 
 ## Next Steps
 
-- **Add more queries to your server** – set up the operations your AI agents will use most, like fetching orders, searching records, or updating data.
-- **Connect more integrations** – add Slack, Confluence, or other services.
-- **Invite your team** – add colleagues as clients so they can use the same server with their own AI.
+- **Scale your operations** – Add complex queries for fetching orders or updating records.
+- **Expand your ecosystem** – Integrate Slack or Confluence to centralize your strategic insights.
+- **Enable your team** – Invite colleagues so **they will** benefit from the same high-context AI tools.
 
 ---
 
