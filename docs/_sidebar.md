@@ -1,7 +1,7 @@
 - **Getting Started**
 
   - [Overview](/)
-  - [Creating your First Tool](/creating-tools)
+  - [Quick Start](/quickstart)
 
 - **Integrations**
   - [Overview](/integrations/)
