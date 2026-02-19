@@ -12,8 +12,6 @@
   <link rel="stylesheet" href="https://unpkg.com/docsify-plugin-toc@1.3.1/dist/light.css">
   <!-- Sidebar Collapse Plugin CSS -->
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar.min.css" />
-  <!-- Docsify Alerts Plugin CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-alerts@1/dist/alert.css">
 </head>
 <body>
   <div id="app"></div>
@@ -34,10 +32,20 @@
         depth: 3
       },
       toc: {
-    tocMaxLevel: 5,
-    target: 'h2, h3, h4, h5, h6',
-    ignoreHeaders:  ['<!-- {docsify-ignore} -->', '<!-- {docsify-ignore-all} -->']
-  },
+        tocMaxLevel: 5,
+        target: 'h2, h3, h4, h5, h6',
+        ignoreHeaders:  ['<!-- {docsify-ignore} -->', '<!-- {docsify-ignore-all} -->']
+      },
+      'flexible-alerts': {
+        style: 'flat'
+      },
+      tabs: {
+        persist: true, // default
+        sync: true, // default
+        theme: 'classic', // default
+        tabComments: true, // default
+        tabHeadings: true // default
+      }
     }
   </script>
   <!-- Docsify v4 -->
@@ -48,7 +56,9 @@
   <script src="https://unpkg.com/docsify-plugin-toc@1.3.1/dist/docsify-plugin-toc.min.js"></script>
   <!-- Sidebar Collapse Plugin -->
   <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
-  <!-- Docsify Alerts Plugin -->
-  <script src="https://cdn.jsdelivr.net/npm/docsify-alerts@1/dist/alert.min.js"></script>
+  <!-- Flexible Alerts Plugin -->
+  <script src="https://unpkg.com/docsify-plugin-flexible-alerts"></script>
+  <!-- docsify (latest v4.x.x)-->
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4"></script>
 </body>
 </html>
