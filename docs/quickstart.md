@@ -10,7 +10,7 @@ Get your first MCP server up and running in 5 minutes!
 
 **Time required:** 5 minutes
 
-
+> [!TIP|label:What is MCP]
 > **MCP (Model Context Protocol)** is an open standard that lets MCP-compatible AI models like ChatGPT, Claude, Github Copilot, etc. connect to external data sources, tools, and services.  
 > [Learn More: Model Context Protocol](https://modelcontextprotocol.io)
 
@@ -39,7 +39,7 @@ Get your first MCP server up and running in 5 minutes!
    See detailed articles on how to work with your AI Agent:
    - [Connect Claude with your MCP Server (Detailed Article)](https://www.mcp-express.com/blogs/create-and-connect-mcp-server-with-claude-under-5-minutes/)
 
-**Congratulations!** You have successfully democratized your database access.
+:1st_place_medal: **Congratulations!** You have successfully democratized your database access.
 
 **Try these prompts to test your new flow state:**
 - `"Analyze the schema of my connected database."`
