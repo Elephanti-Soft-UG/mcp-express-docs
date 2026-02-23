@@ -2,12 +2,12 @@
  * @type {import('prettier').Config}
  */
 export default {
-  arrowParens: "avoid",
+  arrowParens: 'avoid',
   bracketSpacing: true,
-  endOfLine: "auto",
+  endOfLine: 'auto',
   printWidth: 85,
   semi: false,
   singleQuote: true,
   jsxSingleQuote: true,
-  trailingComma: "es5",
-};
+  trailingComma: 'es5',
+}
