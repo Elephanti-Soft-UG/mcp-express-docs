@@ -69,7 +69,44 @@ const config: Config = {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
     },
+    metadata: [
+      {
+        name: 'keywords',
+        content:
+          'MCP Express, AI tools, custom tools, AI agents, documentation, API reference, user guides',
+      },
+      {
+        name: 'description',
+        content:
+          'MCP Express is a powerful platform that allows you to create custom tools for AI agents. Our documentation provides comprehensive guides, API references, and best practices to help you unleash the full potential of your AI applications.',
+      },
+    ],
   } satisfies Preset.ThemeConfig,
+  headTags: [
+    {
+      tagName: 'script',
+      attributes: { type: 'application/ld+json' },
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org/',
+        '@type': 'Organization',
+        name: 'MCP Express',
+        url: 'https://docs.mcp-express.com/',
+        logo: 'https://docs.mcp-express.com/img/logo.svg',
+      }),
+    },
+  ],
+  plugins: [
+    [
+      '@docusaurus/plugin-sitemap',
+      {
+        lastmod: 'date',
+        changefreq: 'weekly',
+        priority: 0.5,
+        ignorePatterns: ['/tags/**'],
+        filename: 'sitemap.xml',
+      },
+    ],
+  ],
 }
 
 export default config
