@@ -1,0 +1,8 @@
+{
+  "label": "PostgreSQL",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "Learn how to integrate MCP Express with PostgreSQL to manage your database efficiently and leverage its powerful features for your applications."
+  }
+}

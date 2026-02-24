@@ -44,6 +44,7 @@ const config: Config = {
         height: 180,
         alt: 'MCP Express Logo',
         src: 'img/logo.svg',
+        srcDark: 'img/logo-dark.svg',
       },
       items: [
         {
