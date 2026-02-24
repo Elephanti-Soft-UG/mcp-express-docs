@@ -33,7 +33,7 @@ const config: Config = {
     ],
   ],
   themeConfig: {
-    image: 'img/docusaurus-social-card.jpg',
+    image: 'img/mcp-express-social-card.png',
     colorMode: {
       respectPrefersColorScheme: true,
     },
