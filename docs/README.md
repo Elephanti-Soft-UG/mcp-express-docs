@@ -1,32 +1,69 @@
-# Getting Started
+# MCP Express
 
-Welcome to **MCP Express** - the fastest way to convert your existing resources into MCP (Model Context Protocol) servers.
+Build and deploy MCP servers in minutes. Connect your tools, APIs, and data sources to any AI agent—with full type safety, scoped permissions, and zero per-client configuration.
 
-## What is MCP Express?
+---
 
-MCP Express is a platform that allows you to quickly transform your existing databases, REST APIs, and other resources into fully functional MCP servers. With our intuitive interface, you can create MCP servers and define tools and resources within minutes.
+## What Is MCP Express?
+
+MCP Express is a framework for building Model Context Protocol (MCP) servers—the bridge between your existing services and AI agents. Instead of rebuilding integrations for every AI client, you define your tools and resources once. Any MCP-compatible client (Claude, Cursor, VS Code, and more) can then call them with full type safety and access control.
+
+> [!NOTE]
+> Think of it as a universal adapter for AI agents: plug in your services once, and any agent can connect.
+
+---
+
+## What You Can Do
+
+**Expose your services as AI-ready tools.**
+Turn your APIs, databases, and internal services into typed, callable tools that any MCP-compatible AI client can use—no per-client wiring required.
+
+**Give agents access to live context.**
+Connect models to real-time data like files, search results, and user records without bloating your prompts or losing control over what gets shared.
+
+**Query your infrastructure in minutes.**
+Point agents at your logs, databases, and resources and start getting actionable insights from your actual data—not synthetic examples.
+
+**Stay in control of what agents can do.**
+Define exactly what's accessible using typed schemas, scoped permissions, and approval gates. Agents get structured access, not a blank check.
+
+---
 
 ## Key Concepts
 
-### MCP Servers
-Model Context Protocol (MCP) servers provide a standardized way for AI models to interact with external resources and tools. Each MCP server can contain multiple tools and resources that AI models can use to perform various tasks.
+### MCP Server
+An MCP server hosts your tools and resources that AI models can use to perform tasks. They provide a standardized way for AI models to interact.
 
-For detailed information about the Model Context Protocol, visit the [official MCP documentation](https://modelcontextprotocol.io/).
+### Tools
+The callable functions you expose to agents. Clients invoke tools by name, pass validated arguments, and receive structured output.
 
-### Tools and Resources
-Within each MCP server, you can create:
-- **Tools**: Interactive functions that AI models can call to perform actions
-- **Resources**: Data sources that AI models can read from to gather information
+### MCP Client
+Any MCP-compatible application making requests to your server—such as Claude, ChatGPT, or Github Copilot. Because all clients speak the same protocol, no custom integration is needed on either side.
 
-### Integrations
-Each tool or resource connects to your existing systems through integrations. MCP Express supports various integration types including databases, REST APIs, and more, each with their own configuration options.
+---
 
-## Quick Start
+## Why MCP Express?
 
-1. **Sign up** at [www.mcp-express.com](https://www.mcp-express.com)
-2. **Create your first MCP server** using our web interface
-3. **Add integrations** to connect your existing databases or APIs
-4. **Define tools and resources** that leverage your integrations
-5. **Deploy and connect** your MCP server to AI applications
+Most frameworks make you choose between speed and control. MCP Express gives you both—and is purpose-built for the way AI agents actually work today.
 
-Ready to dive deeper? Check out our [Integrations](/integrations/) section to learn about connecting your specific data sources and APIs.
+**Write once, connect everywhere.**
+Define a tool or resource once, and it works across every MCP-compatible client automatically. No duplicate configuration, no client-specific adapters, and no maintenance overhead as the AI ecosystem grows.
+
+**Up and running in minutes, not days.**
+MCP Express is designed to be picked up fast. Clear conventions, straightforward configuration, and no framework-specific magic to untangle before you can ship something real.
+
+**Security that doesn't slow you down.**
+Typed schemas validate inputs before agents ever touch your services. Scoped permissions and approval gates mean you can grant agents meaningful access without opening the door wider than intended.
+
+**Built for production from day one.**
+MCP Express isn't a demo tool. It's designed to sit in front of real services, handling real agent requests—with the observability and reliability guarantees your infrastructure expects.
+
+---
+
+## Start Building
+
+- [Sign up for MCP Express](#)
+- [Quick Start](#)
+- [Create an MCP Server](#)
+- [Connect your tool](#)
+- [Connect your AI agent to your MCP server](#)
