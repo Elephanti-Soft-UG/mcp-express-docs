@@ -38,13 +38,13 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      // title: 'MCP Express',
       logo: {
         width: 180,
         height: 180,
         alt: 'MCP Express Logo',
         src: 'img/logo.svg',
         srcDark: 'img/logo-dark.svg',
+        href: '/docs/category/get-started',
       },
       items: [
         {
@@ -54,8 +54,13 @@ const config: Config = {
           label: 'Documentation',
         },
         {
-          href: 'https://github.com/Elephanti-Soft-UG/mcp-express-docs',
-          label: 'GitHub',
+          href: 'https://app.mcp-express.com/login',
+          label: 'Login',
+          position: 'right',
+        },
+        {
+          href: 'https://app.mcp-express.com/signup',
+          label: 'Get Started for Free',
           position: 'right',
         },
       ],
