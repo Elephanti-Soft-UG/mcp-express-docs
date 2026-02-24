@@ -33,6 +33,10 @@ const config: Config = {
           changefreq: 'weekly',
           priority: 0.5,
         },
+        googleAnalytics: {
+          anonymizeIP: true,
+          trackingID: 'G-EBCRH32SMD',
+        },
       } satisfies Preset.Options,
     ],
   ],
