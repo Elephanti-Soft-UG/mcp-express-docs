@@ -1,0 +1,47 @@
+---
+sidebar_position: 1
+sidebar_label: 'Overview'
+---
+
+MCP Express is a no-code engine designed to bridge your data—databases, APIs, and cloud services—directly to AI agents. It abstracts the Model Context Protocol (MCP) so you can deploy a production-ready server without writing boilerplate transport logic.
+
+## Capabilities
+- **Low-Code Tool Builder**: Define and deploy tools through a visual interface. No manual JSON-RPC implementation or boilerplate code required.
+- **Custom Code as Tools**: Need more flexibility? Write and execute custom logic directly within the platform to handle complex data or unique integrations.
+- **Granular Tool Governance**: Complete control over visibility. You decide exactly which tools are exposed to the LLM and which remain hidden.
+- **Built-in Access Control (RBAC)**: Manage users and clients with a dedicated role-based system. Assign tools to specific roles to ensure secure, organizational-level deployment.
+- **Instant Server Provisioning**: Create and launch multiple MCP servers with a single click. Your infrastructure is live and ready to connect immediately.
+
+## Core Architecture
+MCP Express orchestrates the communication between your data sources and AI clients by leveraging three primary components:
+- **MCP Server**: The host environment that abstracts your tools and resources via the JSON-RPC lifecycle.
+- **Tool**: A schema-validated, callable function (API endpoint, SQL query, etc.) invoked by an agent.
+- **MCP client**: The interface (e.g., Claude) that consumes your server’s capabilities.
+
+:::tip
+For a deep dive into the underlying transport protocols and lifecycle specifications, refer to the official [Model Context Protocol documentation](https://modelcontextprotocol.io/docs/getting-started/intro).
+:::
+
+## Security & Reliability
+
+We prioritize enterprise-grade data governance to ensure your credentials remain protected throughout the integration lifecycle.
+
+- **Hardware-Backed Encryption**: All integration credentials and sensitive environment variables are encrypted at rest via [AWS Key Management Service (KMS)](https://aws.amazon.com/kms/features/).
+- **Stateless Execution**: Our architecture ensures low-latency execution while maintaining strict data boundaries between your environment and the LLM.
+- **Audit-Ready Logs**: Track tool invocation and access patterns to maintain visibility over agent behavior.
+
+:::info
+Retention Policy: Audit logs are retained for 30 days by default.
+:::
+
+### Supported Integrations
+
+MCP Express provides high-performance connectors for enterprise data layers. Below are our most common integrations; view our [Integrations](/docs/category/integrations) for the complete list.
+- [PostgreSQL](/docs/category/postgresql), [MySQL](docs/integrations/mysql), [Microsoft SQL Server](/docs/integrations/mssql)
+- [DynamoDB](/docs/integrations/dynamodb)
+- [REST APIs](/docs/integrations/rest-api)
+- [Confluence](/docs/integrations/confluence) 
+- [CloudWatch](/docs/integrations/cloudwatch) 
+
+## Next Step
+Ready to provision your first server? Follow our [step-by-step guide](/docs/get-started/quickstart) to connect your first tool to an AI client.

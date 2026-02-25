@@ -24,7 +24,7 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          editUrl: 'https://github.com/Elephanti-Soft-UG/mcp-express-docs/main/',
+          editUrl: undefined,
         },
         theme: {
           customCss: './src/css/custom.css',
