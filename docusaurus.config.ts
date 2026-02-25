@@ -10,7 +10,7 @@ const config: Config = {
   favicon: 'img/favicon.ico',
   future: { v4: true },
   url: 'https://elephanti-soft-ug.github.io',
-  baseUrl: '/mcp-express-docs/',
+  baseUrl: '/',
   organizationName: 'Elephanti Soft UG',
   projectName: 'mcp-express-docs',
   onBrokenLinks: 'throw',
