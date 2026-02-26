@@ -52,7 +52,7 @@ const config: Config = {
         alt: 'MCP Express Logo',
         src: 'img/logo.svg',
         srcDark: 'img/logo-dark.svg',
-        href: '/docs/category/get-started',
+        href: '/docs/get-started/overview',
       },
       items: [
         {

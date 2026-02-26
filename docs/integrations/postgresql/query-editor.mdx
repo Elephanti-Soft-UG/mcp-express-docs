@@ -14,7 +14,7 @@ import TabItem from '@theme/TabItem'
   <TabItem value='create-sql' label='Create SQL' default>
     The Create SQL interface provides a guided approach for users without SQL expertise:
 
-    ![Claude Answering Queries By Checking Postgres Database](../images/postgresql/create_sql_query_by_selecting_tables_and_columns.gif)
+    ![Claude Answering Queries By Checking Postgres Database](/resources/integrations/postgresql/create_sql_query_by_selecting_tables_and_columns.gif)
 
     - Select tables from your synced database
     - Choose from pre-defined common queries
@@ -29,7 +29,7 @@ import TabItem from '@theme/TabItem'
 
     Custom SQL supports dynamic queries, meaning the same saved query can return different results depending on the values passed in at runtime. Instead of writing a separate query for every possible scenario, you write one query with `{{argument_name}}` placeholders and let the caller supply the values each time it runs.
 
-    ![Custom SQL Method](../images/postgresql/custom-sql-query-for-query-editor-page.png)
+    ![Custom SQL Method](/resources/integrations/postgresql/custom-sql-query-for-query-editor-page.png)
 
     This is useful when you need to look up data for a specific user, filter by a date range, or scope results to a particular category without hardcoding those values into the query itself.
 
@@ -60,7 +60,7 @@ import TabItem from '@theme/TabItem'
     ### Allow AI Dynamically Generate Queries
     The special `{{query}}` argument lets your AI assistant write and execute SQL dynamically based on natural language prompts. Instead of a fixed query with static placeholders, the entire SQL statement is generated at runtime by the AI based on the user's request.
 
-    ![Claude Answering Queries By Checking Postgres Database](../images/postgresql/sql_for_ai_to_generate_query.png)
+    ![Claude Answering Queries By Checking Postgres Database](/resources/integrations/postgresql/sql_for_ai_to_generate_query.png)
 
 
     For example, if you ask *"Show me the top 5 customers by revenue this month"* and you have not set up the necessary query, the AI constructs and runs an appropriate SQL query against your database automatically — no predefined query structure required.
