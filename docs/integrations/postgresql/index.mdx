@@ -6,4 +6,11 @@ The PostgreSQL integration provides a secure, schema-validated interface between
 
 ![Claude Answering Queries](/resources/claude_answering_user_queries_quick-start-guide.gif)
 
+## Capabilities
+- **SQL Templating & Dynamic Variables**: Admins can define rigid SQL structures that accept dynamic parameters from the LLM. This enables granular control, such as restricting access to specific rows (e.g., WHERE status = 'released').
+- **Granular Schema Exposure**: Provision read-only access to specific tables while enforcing column-level redaction for sensitive data like PII or credentials.
+- **Automated Schema Inference**: High-fidelity mapping of PostgreSQL data types to JSON-RPC tool definitions, ensuring the LLM understands your data structure.
+
+## Technical Resources
+The following modules detail the lifecycle of your PostgreSQL integration:
 <DocCardList />
