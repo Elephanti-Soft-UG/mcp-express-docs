@@ -24,7 +24,7 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          editUrl: 'https://github.com/Elephanti-Soft-UG/mcp-express-docs/main/',
+          editUrl: undefined,
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -52,7 +52,7 @@ const config: Config = {
         alt: 'MCP Express Logo',
         src: 'img/logo.svg',
         srcDark: 'img/logo-dark.svg',
-        href: '/docs/category/get-started',
+        href: '/docs/get-started/overview',
       },
       items: [
         {

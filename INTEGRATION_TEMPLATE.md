@@ -21,7 +21,7 @@
 4. **[Additional Setup Step]**: [Description of any other required setup steps]
 5. **Test Connection**: Use the built-in connection test to verify your setup works correctly
 
-![Integration Configuration](images/[integration-name]-config.png)
+![Integration Configuration](/resources/integrations/[integration-name]-config.png)
 
 _[Caption describing what the screenshot shows]_
 
