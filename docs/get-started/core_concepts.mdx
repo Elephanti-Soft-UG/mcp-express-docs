@@ -1,0 +1,31 @@
+---
+sidebar_position: 3
+sidebar_label: 'Core Concepts'
+---
+
+# Core Concepts
+Understanding the architecture of the Model Context Protocol (MCP) is essential for provisioning secure and scalable integrations. The ecosystem is composed of three primary pillars: Hosts, Clients, and Servers.
+
+## MCP Server
+The **Server** is the specialized technical bridge that interfaces directly with your data sources (e.g., PostgreSQL, Slack, AWS).
+- **Role**: It abstracts the underlying API or database driver logic.
+- **Function**: It exposes specific datasets and capabilities to the protocol without revealing the entire infrastructure.
+- **Statelessness**: MCP servers are designed to be stateless, ensuring low-latency execution and high reliability across different sessions.
+
+## Tools
+**Tools** are the actionable functions that a Server exposes to an LLM. They represent "Write" or "Execute" capabilities.
+
+- **Definition**: Each Tool is a JSON-RPC definition that tells the LLM exactly what parameters it requires (e.g., user_id or email_body).
+- **Orchestration**: When an LLM decides to take an action—such as updating a database row or sending a message—it invokes a Tool.
+- **Validation**: All Tools are schema-validated, ensuring the LLM cannot pass malformed data to your backend systems.
+
+## MCP Client
+An MCP Client is any application capable of routing protocol messages between an LLM and an MCP Server.
+
+- **Registration**: A Client must be registered and authorized to interface with a specific Server.
+- **Ecosystem**: Common clients include the Claude Desktop App, custom-built IDE extensions, or your own proprietary AI applications.
+- **The "Router" Role**: The client does not generate the data; it orchestrates the flow, ensuring the LLM’s request reaches the correct Server and the Server’s response is returned to the LLM context.
+
+:::tip Register your Clients
+You can register your clients for any given server [here](https://app.mcp-express.com/clients)
+:::
