@@ -23,6 +23,13 @@ MCP Express orchestrates the communication between your data sources and AI clie
 For a deep dive into the underlying transport protocols and lifecycle specifications, refer to the official [Model Context Protocol documentation](https://modelcontextprotocol.io/docs/getting-started/intro).
 :::
 
+![Core Architecture](/resources/core_arch.png)
+
+### Modular Deployment & Multi-Tenancy
+MCP Express supports the concurrent deployment of multiple servers, each configured with a unique subset of tools. This modularity allows you to logically segment capabilities based on **specific clients** or **distinct use cases**, ensuring that each AI agent interacts only with the relevant data environment.
+
+Furthermore, the platform architecture enforces strict **Account-Level Isolation**. All server configurations and tools are abstracted at the account layer, providing a secure, multi-tenant environment where data and resources remain invisible to other registered accounts.
+
 ## Security & Reliability
 
 We prioritize enterprise-grade data governance to ensure your credentials remain protected throughout the integration lifecycle.
