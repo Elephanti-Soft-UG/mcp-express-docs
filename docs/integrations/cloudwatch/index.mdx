@@ -1,0 +1,17 @@
+import DocCardList from '@theme/DocCardList';
+
+# CloudWatch Integration
+
+The CloudWatch integration connects MCP Express to Amazon CloudWatch Logs Insights so tools can execute scoped log queries through consistent JSON-RPC contracts. It supports static and templated query inputs while preserving operational controls for production workloads.
+
+[IMAGE_SLOT: Hero animation showing assistant querying CloudWatch logs]
+
+## Capabilities
+- **Logs Insights Query Execution**: Run CloudWatch Logs Insights queries against approved log groups and time windows.
+- **Templated Runtime Inputs**: Parameterize Log Group, Start Time, End Time, and Query fields with validated `{{ }}` variables.
+- **Cost-Aware Query Controls**: Bound result volume with query limits and constrained time ranges.
+- **Secure AWS Access**: Authenticate with AWS Access Key and AWS Secret Key stored through protected integration credentials.
+
+## Technical Resources
+Use the following modules to configure connection details, tool behavior, and security patterns for CloudWatch.
+<DocCardList />

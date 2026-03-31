@@ -1,0 +1,44 @@
+---
+sidebar_label: Configuration
+sidebar_position: 2
+---
+
+# Configuration
+Configuration maps CloudWatch query behavior into callable MCP tools so runtime prompts produce validated, bounded log operations. The integration keeps query inputs explicit across log group, time window, and query statement fields.
+
+## Tool Orchestration
+CloudWatch uses a single action-oriented setup where one tool executes a Logs Insights query with static or templated values.
+
+### Configuration Setup
+Define the execution template for `Log Group`, `Start Time`, `End Time`, and `Query` so MCP Express can safely resolve runtime inputs.
+
+[IMAGE_SLOT: Guided configuration workflow GIF]
+
+#### How it works:
+- Set fixed values or `{{ }}` template variables for `Log Group`, `Start Time`, `End Time`, and `Query`.
+- Bind template variables to the tool input schema (for example, `functionName`, `startTime`, `endTime`, `limit`).
+- Validate query behavior with representative runtime payloads before enabling the tool.
+- Confirm result size and execution time stay within operational limits.
+
+#### Supported Actions:
+- **Execute Logs Insights Query**: Runs the configured CloudWatch Logs Insights query against the resolved log group and time range.
+
+Example configuration pattern:
+
+```json
+{
+  "Log Group": "/aws/lambda/{{functionName}}",
+  "Start Time": "{{startTime}}",
+  "End Time": "{{endTime}}",
+  "Query": "fields @timestamp, @message | sort @timestamp desc | limit {{limit}}"
+}
+```
+
+#### Governance Controls
+- Restrict template variables to approved patterns (for example, allowed log group prefixes and bounded time windows).
+- Require explicit `limit` usage to prevent excessive result sets.
+- Block mutation-like intent by allowing read-only Logs Insights query execution in tool policy.
+
+:::tip Validate Before Production Enablement
+Test static and templated query paths with known payloads to verify variable substitution, timeout behavior, and predictable result size.
+:::

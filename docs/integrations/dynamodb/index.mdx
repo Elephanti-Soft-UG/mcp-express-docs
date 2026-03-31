@@ -1,0 +1,17 @@
+import DocCardList from '@theme/DocCardList';
+
+# DynamoDB Integration
+
+The DynamoDB integration provides a secure interface between MCP Express and Amazon DynamoDB so AI tools can read and write scoped table data through JSON-RPC. It abstracts request construction and enforces predictable tool contracts for LLM orchestration.
+
+[IMAGE_SLOT: Hero animation showing assistant querying DynamoDB integration]
+
+## Capabilities
+- **Key-Based Retrieval**: Execute deterministic single-item lookups using partition key templates and validated runtime arguments.
+- **Controlled Writes**: Provision bounded put-item tools for operational workflows such as session persistence and event capture.
+- **Schema-Aware Tool Contracts**: Map expected input and output shapes into MCP tool schemas to reduce ambiguity during model calls.
+- **Scoped Table Access**: Bind each integration to explicit tables and operations to enforce least-privilege boundaries.
+
+## Technical Resources
+The following modules cover connection setup, tool configuration, and security patterns for DynamoDB.
+<DocCardList />

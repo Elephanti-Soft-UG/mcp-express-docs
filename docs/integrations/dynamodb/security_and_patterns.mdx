@@ -1,0 +1,44 @@
+---
+sidebar_label: Security and Patterns
+sidebar_position: 3
+---
+
+# Security & Implementation Patterns
+
+This section defines operational guardrails for running DynamoDB-backed MCP tools in production. Apply these controls to reduce data exposure risk, prevent unsafe execution paths, and maintain predictable latency.
+
+## Transaction Guardrails (Restricted Operations)
+DynamoDB tool definitions should explicitly restrict high-risk operations and mutation scope. In most deployments, only deterministic key-based reads and bounded writes should be enabled.
+
+:::danger Dynamic Execution Risk
+Allowing unconstrained runtime selection of operations, table names, or request payloads can lead to unauthorized access patterns or unintended data mutation. Enforce allowlists for operations and table targets.
+:::
+
+## Fully Dynamic AI Queries
+A fully dynamic mode can allow the model to construct request payloads at runtime for broader analytical flexibility. This mode increases operational risk because request shape, target attributes, and write behavior may vary per prompt.
+
+:::warning Avoid Unconstrained Dynamic Mode in Production
+Do not enable fully dynamic request generation in production unless strict IAM policies, schema validation, operation allowlists, and output redaction are all enforced.
+:::
+
+## Data Governance & Scopes
+- Enforce least privilege with IAM policies scoped to explicit tables and actions.
+- Restrict attribute exposure using projection and response shaping before model delivery.
+- Separate read and write tools to keep audit boundaries clear.
+- Store credentials in managed secret stores and rotate them on a defined schedule.
+- Apply request validation for all template variables before DynamoDB execution.
+
+## Performance Optimization
+
+| Pattern | Description | Benefit |
+|---|---|---|
+| Partition-Key Access | Design tools around partition-key lookups and avoid broad scans. | Delivers low-latency, predictable responses for MCP calls. |
+| Projection Expressions | Return only required attributes for each tool response. | Reduces payload size and model context overhead. |
+| Conditional Writes | Add conditions to write paths for idempotency and conflict control. | Prevents accidental overwrites and improves data consistency. |
+| Timeout and Retry Policy | Use bounded retries with exponential backoff for transient failures. | Improves resilience without creating runaway execution. |
+
+## Protocol Limitations
+- Large item payloads can reduce model response quality and should be constrained by projection.
+- Complex relational joins are not native to DynamoDB and must be modeled at application or tool orchestration level.
+- Scan-heavy patterns are expensive and can exceed latency targets for conversational interactions.
+- Eventual consistency behavior may require explicit consistency settings for critical reads.
