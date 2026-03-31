@@ -14,13 +14,13 @@ Define the execution template for `Log Group`, `Start Time`, `End Time`, and `Qu
 
 [IMAGE_SLOT: Guided configuration workflow GIF]
 
-#### How it works:
+### How It Works
 - Set fixed values or `{{ }}` template variables for `Log Group`, `Start Time`, `End Time`, and `Query`.
 - Bind template variables to the tool input schema (for example, `functionName`, `startTime`, `endTime`, `limit`).
 - Validate query behavior with representative runtime payloads before enabling the tool.
 - Confirm result size and execution time stay within operational limits.
 
-#### Supported Actions:
+### Supported Actions
 - **Execute Logs Insights Query**: Runs the configured CloudWatch Logs Insights query against the resolved log group and time range.
 
 Example configuration pattern:
@@ -34,7 +34,7 @@ Example configuration pattern:
 }
 ```
 
-#### Governance Controls
+### Governance Controls
 - Restrict template variables to approved patterns (for example, allowed log group prefixes and bounded time windows).
 - Require explicit `limit` usage to prevent excessive result sets.
 - Block mutation-like intent by allowing read-only Logs Insights query execution in tool policy.

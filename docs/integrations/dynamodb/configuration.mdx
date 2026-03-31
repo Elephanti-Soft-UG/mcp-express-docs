@@ -9,22 +9,22 @@ After connection setup, the configuration layer maps DynamoDB actions into calla
 ## Tool Orchestration
 MCP Express exposes DynamoDB through action configuration. You choose an operation (`get` or `put`) and then define action-specific parameters that the tool will enforce at runtime.
 
-### Action Configuration
+## Action Configuration
 Use this mode for standard DynamoDB tools created directly from integration fields.
 
 [IMAGE_SLOT: Guided configuration workflow GIF]
 
-#### How it works:
+### How It Works
 - **Select Operation**: Choose `get` or `put` in the integration action field.
 - **Define Table Scope**: Bind the tool to the target DynamoDB table configured at integration setup.
 - **Configure Action Parameters**: Apply the required settings for the selected operation.
 - **Validate Inputs**: Test with representative runtime values before enabling the tool.
 
-#### Supported Actions:
+### Supported Actions
 - **Get Item**: Retrieve a specific item by primary key.
 - **Put Item**: Store a complete item payload for create or replace workflows.
 
-#### Get Item Parameters:
+### Get Item Parameters
 
 | Parameter | Required | Description | Supports Templates |
 |---|---|---|---|
@@ -35,12 +35,12 @@ Example behavior:
 - If `Key Attribute` is `id` and `Key` is `{{userId}}`, the integration resolves `userId` at runtime and retrieves the matching item.
 - If `Key` is fixed (for example, `abc-123-xyz`), the tool always fetches that single record.
 
-#### Put Item Parameters:
+### Put Item Parameters
 - No extra action configuration fields are required.
 - The tool writes the full item payload it receives at runtime.
 - This is suitable for create and replace workflows where the caller provides a complete object.
 
-#### Governance Controls:
+### Governance Controls
 Use strict input validation to enforce primary key requirements and expected attribute types. Combine tool-level validation with IAM table-level permissions to keep reads and writes scoped.
 
 :::tip Test Tool Contracts Before Deployment

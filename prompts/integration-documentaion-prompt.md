@@ -31,6 +31,13 @@ Use this exact file naming and ordering.
 - Write in present tense and active voice.
 - Keep naming consistent across all generated files (`<integration-name>`, parameter names, action names).
 
+## TOC Heading Rules
+
+- Ensure major sections appear in the Docusaurus page table of contents.
+- Use `##` for top-level content sections under the page title.
+- Use `###` for key subsections that should be visible in TOC.
+- Avoid using `####` for primary workflow sections (for example, How It Works, Supported Actions, Governance Controls).
+
 ## Source-of-Truth Rule (Critical)
 
 - The user-provided rough documentation is the primary source of truth for integration-specific behavior.
@@ -139,20 +146,20 @@ Required sections and order:
 1. `# Configuration`
 2. Intro paragraph (how raw integration capability becomes callable tools).
 3. `## Tool Orchestration`
-4. `### <Primary Configuration Mode Name>` derived from rough documentation. If no specific name is provided, use `### Configuration Setup`.
+4. `## <Primary Configuration Mode Name>` derived from rough documentation. If no specific name is provided, use `## Configuration Setup`.
 5. `[IMAGE_SLOT: Guided configuration workflow GIF]`
-6. `#### How it works:` bullet list.
-7. `#### Supported Actions:` bullet list.
+6. `### How It Works` bullet list.
+7. `### Supported Actions` bullet list.
 8. Optional governance subsection (column/field redaction, scoped outputs).
 9. One `:::tip` admonition for testing/validation.
 
 Optional advanced section (include only if rough documentation explicitly supports it):
 
 - Divider `---`
-- `### <Advanced Configuration Mode Name>` derived from rough documentation.
-- `#### Fixed <query/request> Statements`
+- `## <Advanced Configuration Mode Name>` derived from rough documentation.
+- `### Fixed <query/request> Statements`
 - Code example block.
-- `#### Dynamic <Template/Parameterization> Patterns`
+- `### Dynamic <Template/Parameterization> Patterns`
 - Code example block with placeholders.
 
 Critical constraint:
@@ -264,3 +271,4 @@ Do not return explanations outside file contents.
 8. Security section includes both `:::danger` and `:::warning` admonitions.
 9. Language tags are set on all fenced code blocks.
 10. Output contains file contents only, with no extra commentary.
+11. Key workflow sections use `##`/`###` so they are visible in the page table of contents.
