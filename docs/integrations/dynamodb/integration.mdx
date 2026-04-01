@@ -27,7 +27,7 @@ Grant only `dynamodb:GetItem` and `dynamodb:PutItem` on approved tables unless b
 When running in cloud environments, use role-based credentials and secret managers instead of long-lived static keys.
 :::
 
-## Handshake & Schema Discovery
+## Handshake & Capability Discovery
 After connection is submitted, MCP Express executes a validation and preparation flow:
 - **Credential Validation**: Verifies AWS signing and confirms the principal can reach DynamoDB APIs in the selected region.
 - **Table Access Check**: Validates configured table scope and operation permissions for the integration principal.
