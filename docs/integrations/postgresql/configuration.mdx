@@ -9,7 +9,7 @@ Once your database is connected, the Configuration layer defines how the LLM int
 ## Tool Orchestration
 The MCP server abstracts complex SQL operations into simple tool definitions. You have two primary methods for defining these interfaces: the Guided Query Editor and the Custom SQL Editor.
 
-### Guided Query Editor (No-Code)
+## Guided Query Editor (No-Code)
 The Guided Editor is the most frictionless way to expose database actions. After the initial schema discovery, the editor loads your available tables and allows you to provision specific actions without writing a single line of SQL.
 
 ![Guided Query Editor](/resources/integrations/postgresql/create_sql_query_by_selecting_tables_and_columns.gif)
@@ -30,7 +30,7 @@ For "Get" and "List" operations, you can explicitly define which columns are exp
 
 ---
 
-### Custom SQL Editor (Advanced)
+## Custom SQL Editor (Advanced)
 The Custom SQL Editor allows you to define precise tool behavior for complex use cases involving JOINs or aggregations. When using this editor, you have two primary options for how to define your queries.
 
 ### Fixed SQL Statements
@@ -53,3 +53,4 @@ ORDER BY created_at DESC
 
 :::tip Interface Testing
 You can validate your tool definitions instantly using the built-in Testing Tool. This allows you to verify that the LLM receives the expected JSON-RPC response before deploying the server.
+:::

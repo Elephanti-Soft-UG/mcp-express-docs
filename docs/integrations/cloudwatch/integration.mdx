@@ -11,13 +11,13 @@ Configure CloudWatch connectivity so MCP Express can perform a secure handshake 
 
 | Parameter | Technical Description | Required |
 |---|---|---|
-| Region | AWS region that hosts the target CloudWatch log groups (for example, `us-east-1`). | Yes |
-| AWS Access Key | Access key ID used to sign CloudWatch API requests. | Yes |
-| AWS Secret Key | Secret key paired with the access key ID for authenticated request signing. | Yes |
 | Log Group | CloudWatch log group path to query; supports runtime templating with `{{ }}`. | Yes |
 | Start Time | ISO UTC start timestamp for query scope; supports runtime templating with `{{ }}`. | Yes |
 | End Time | ISO UTC end timestamp for query scope; supports runtime templating with `{{ }}`. | Yes |
 | Query | CloudWatch Logs Insights query text; supports runtime templating with `{{ }}`. | Yes |
+| AWS Access Key | Access key ID used to sign CloudWatch API requests. | Yes |
+| AWS Secret Key | Secret key paired with the access key ID for authenticated request signing. | Yes |
+| Region | AWS region that hosts the target CloudWatch log groups (for example, `us-east-1`). | Yes |
 
 [IMAGE_SLOT: Integration connection form screenshot]
 

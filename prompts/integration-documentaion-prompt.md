@@ -1,4 +1,4 @@
-Version: 2
+Version: 1.0
 
 # Integration Documentation Generation Prompt
 
@@ -37,6 +37,14 @@ Use this exact file naming and ordering.
 - Use `##` for top-level content sections under the page title.
 - Use `###` for key subsections that should be visible in TOC.
 - Avoid using `####` for primary workflow sections (for example, How It Works, Supported Actions, Governance Controls).
+
+## Official Documentation References Rule
+
+- Add official vendor documentation references when they improve correctness or implementation clarity for an integration.
+- This is not strictly required for every integration, but it is strongly recommended for integrations that depend on external query languages, protocol syntax, API semantics, or service-specific constraints.
+- Place references in the most relevant section (typically `configuration.mdx`) under a clear heading such as `## <Service/Protocol> Reference Documentation`.
+- Prefer primary vendor sources (for example, AWS, Microsoft, Google, official product docs) over community or third-party blogs.
+- Include only references that are directly relevant to features described in the page.
 
 ## Source-of-Truth Rule (Critical)
 
@@ -170,6 +178,9 @@ Technology-specific rule:
 - For API and request-driven integrations, use request/action terminology and `json`, `http`, or `bash` examples as appropriate.
 - For event/filter integrations, emphasize trigger scope, filter expressions, and payload mappings.
 - For collaboration/knowledge integrations, emphasize workspace scope, content selection rules, and permission boundaries.
+- For observability query integrations (for example, CloudWatch Logs Insights), document whether configuration is query-only and explicitly state that connection scope fields are set in `integration.mdx`.
+- For query-based integrations, include explicit static and templated query examples when supported by rough documentation.
+- For query/protocol-driven integrations, add a short reference section with official source links plus common commands/functions (or equivalent primitives) relevant to that integration.
 - Choose section wording and code language tags based on `<query-or-request-patterns>` and rough documentation examples.
 
 Configuration derivation workflow:
@@ -272,3 +283,5 @@ Do not return explanations outside file contents.
 9. Language tags are set on all fenced code blocks.
 10. Output contains file contents only, with no extra commentary.
 11. Key workflow sections use `##`/`###` so they are visible in the page table of contents.
+12. For query-based integrations, configuration clearly distinguishes static vs templated query patterns when both are supported.
+13. Official documentation references are included when relevant and helpful, especially for external syntax/protocol/service standards.
