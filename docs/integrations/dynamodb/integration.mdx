@@ -17,7 +17,7 @@ Configure the following fields using a dedicated IAM principal with only require
 | AWS Secret Access Key | Secret key paired with the access key ID for signed requests. | Conditional |
 | AWS Region | AWS Region where the target DynamoDB table is hosted. | Yes |
 
-[IMAGE_SLOT: Integration connection form screenshot]
+![Integration connection form](/resources/integrations/dynamodb/dynamodb_integration_connection_form.png)
 
 :::warning IAM Scope Requirements
 Grant only `dynamodb:GetItem` and `dynamodb:PutItem` on approved tables unless broader operations are explicitly required. Avoid wildcard permissions on table resources and actions.
