@@ -12,7 +12,7 @@ CloudWatch uses a single action-oriented setup where one tool executes a Logs In
 ## Configuration Setup
 Define the execution template for `Query` so MCP Express can safely resolve runtime inputs.
 
-[IMAGE_SLOT: Guided configuration workflow GIF]
+![Guided configuration](/resources/integrations/cloudwatch/cloudwatch_configuration.png)
 
 ### How It Works
 - Set a fixed query or use `{{ }}` template variables inside `Query`.
@@ -53,6 +53,14 @@ Example configuration object:
   "Query": "fields @timestamp, @message | filter @message like /{{keyword}}/ | sort @timestamp desc | limit {{limit}}"
 }
 ```
+
+:::warning Templated Variables Can Expand Cost and Scope
+Unbounded `{{ }}` inputs can generate expensive query paths (for example, very high `limit` values, broad filter patterns, or weakly constrained time windows). This can increase scanned log volume, response latency, and CloudWatch cost.
+:::
+
+:::tip Guardrails Make `{{ }}` Safe for Production Use
+Templated queries are appropriate when connector safeguards are enforced: variable validation, allowlisted patterns, bounded `limit`, fixed or constrained log groups, and strict `Start Time`/`End Time` ranges. With these controls, runtime flexibility is preserved while cost and scope remain predictable.
+:::
 
 ## CloudWatch Logs Insights Query Syntax
 Use the official AWS documentation as the source of truth when composing or validating query statements:

@@ -18,10 +18,12 @@ Configure CloudWatch connectivity so MCP Express can perform a secure handshake 
 | AWS Secret Key | Secret key paired with the access key ID for authenticated request signing. | Yes |
 | Region | AWS region that hosts the target CloudWatch log groups (for example, `us-east-1`). | Yes |
 
-[IMAGE_SLOT: Integration connection form screenshot]
+![Integration connection](/resources/integrations/cloudwatch/cloudwatch_integration_connection_form.png)
 
 :::warning Scope and Cost Control
-Unbounded time windows and unrestricted log group patterns can increase query cost and latency. Keep `Log Group`, `Start Time`, `End Time`, and `Query` constrained to approved operational scopes.
+Unbounded time ranges or broad log group patterns can increase cost and latency. Always constrain Log Group, Start Time, End Time, and Query.
+
+Be cautious with `{{ }}` placeholders—treat inputs as untrusted. Enforce allowlists, bounded limits, and restricted log group scopes to prevent excessive query expansion and unpredictable costs.
 :::
 
 :::tip Use Least-Privilege IAM Credentials

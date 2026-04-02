@@ -14,8 +14,14 @@ Restrict CloudWatch tools to approved log groups, bounded time ranges, and read-
 Allowing unconstrained runtime query construction can expose sensitive log data, scan excessive volumes, and trigger unplanned CloudWatch costs. Enforce strict validation and parameter allowlists before execution.
 :::
 
+Runtime note: In this integration, `{{ }}` placeholders are the dynamic input mechanism. Any value injected through `{{ }}` is part of runtime query execution and must be treated as untrusted input.
+
 ## Fully Dynamic AI Operations
 Dynamic mode allows the model to shape query statements at runtime from prompt context. This can improve investigative flexibility but increases the risk of broad data access and unstable performance.
+
+Scope distinction:
+- **Templated Dynamic Queries**: The base query is fixed, but specific values are injected through `{{ }}` placeholders.
+- **Fully Dynamic Queries**: The model can construct large portions of the query structure at runtime.
 
 :::warning Do Not Run Unconstrained Dynamic Queries in Production
 Only enable dynamic query behavior when IAM scope, input validation, log group allowlists, timeout caps, and output redaction controls are fully enforced.
