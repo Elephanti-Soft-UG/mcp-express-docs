@@ -33,7 +33,7 @@ While `{{query}}` unlocks significant flexibility, it is a high-privilege featur
 The MCP server adheres to the principle of least privilege. To ensure robust data security, implement the following patterns:
 
 - **Column-Level Redaction**: Use the Guided Query Editor to exclude PII (Personally Identifiable Information) from the LLM's context.
-- **Row-Level Security (RLS)**: We recommend provisioning a MS SQL Server user with appropriate security policies. This ensures that even if an LLM generates a broad query, it can only access rows permitted by its database role.
+- **Row-Level Security (RLS)**: We recommend provisioning an MS SQL Server user with appropriate security policies. This ensures that even if an LLM generates a broad query, it can only access rows permitted by its database role.
 - **Read-Only Replicas**: For analytics use cases, connect the MCP server to a read-only replica to eliminate the risk of accidental data mutation.
 
 ## Performance Optimization
