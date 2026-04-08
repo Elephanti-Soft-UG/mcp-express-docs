@@ -4,147 +4,122 @@ Role-Based Access Control (RBAC) in **MCP Express** provides a structured, audit
 
 ## Overview
 
-RBAC in MCP Express follows one guiding principle:
+Role-Based Access Control (RBAC) in **MCP Express** allows you to control which tools members can access within a server. Access is managed by assigning **roles** to members. Each role defines the set of tools a member is allowed to use.
 
-> Access is granted per tool, scoped to a server, and assigned through roles.
-
-- Each **server** maintains its own isolated access control boundary
-- **Roles** define the set of tools a member may access
-- **Members** inherit access through one or more assigned roles
+- **Server-scoped access control** : Access is isolated to each server. Roles and permissions are defined and enforced independently per server.
+- **Role-based tool access** : Roles act as containers for tool access, determining which tools a member can interact with.
+- **Explicit permission model** : Members can only access tools that are explicitly included in their assigned roles.
 
 :::note
-RBAC is strictly scoped to the server level. Roles and permissions do not extend across servers.
+A member can only use tools that are explicitly allowed by their assigned roles.
 :::
 
 ## Access Model
 
-MCP Express uses a minimal, explicit access model:
+MCP Express follows a minimal and explicit access model designed for clarity and predictability. Access decisions are made at the tool level and enforced consistently across all requests.
 
-- Access is evaluated **per tool** at the time of each request
-- Permissions are **binary** — a member either has access or does not
-- There are **no intermediate permission levels** such as read, write, or execute
+- **Per-request, tool-level evaluation**: Access is evaluated on every request and scoped strictly to individual tools. There is no cached or assumed permission state.
+- **Binary access control**: Permissions are absolute. A member either has access to a tool or does not, with no intermediate states.
+- **Explicit role-based permissions**: All access is granted through roles. There are no implicit permissions, inheritance, or hierarchical access structures.
+
+:::warning
+MCP Express does not support read, write, or scoped permission levels. Access control is strictly based on whether a tool is allowed or not.
+:::
 
 ## Core Components
 
-### Server
+1. **Server**: The server defines the boundary for access control. It isolates roles, members, and tools from other servers, preventing cross-server permission leaks.
 
-- Defines the boundary for access control
-- All roles, members, and tool assignments exist within a server
-- Servers are fully isolated from each other
+2. **Tools**: Tools are the functional units members can interact with. Access is never granted directly and is always mediated through roles, making tools the smallest unit of access control.
 
-### Tools
+3. **Roles**: Roles group tool permissions within a single server. Each role can be assigned to multiple members, and any changes take effect immediately. Design roles around tool usage rather than job titles to ensure predictability.
 
-- Represent functional capabilities within a server
-- Access is granted exclusively through role assignments
+4. **Members**: Members are users within a server. Each member can have only one role per server, and access is strictly limited to the tools included in that role. There is no implicit or cumulative access.
 
-### Roles
-
-Roles group tool permissions into named units. Key points:
-
-- Scoped to a single server
-- Assigned to one or more members
-- Changes take effect immediately
+![Core Components](/resources/security/rbac/components.png)
 
 :::tip
-Design roles around tool usage patterns rather than organizational titles. Keep roles focused and purpose-specific.
+Each member can have only a single role per server. This ensures access remains predictable, auditable, and avoids conflicts. Assign roles thoughtfully to maintain clear responsibility and simplify access management.
 :::
 
-### Members
+## Setting Up Roles and Member Access
 
-- Users operating within a server
-- May hold multiple roles
-- Access is cumulative across all assigned roles
-- No implicit access exists outside of explicit role assignments
-
-![Assign Role](/resources/security/assign-role.gif)
-
-## Access Control Flow
-
-1. Admin creates a server
-2. Admin opens **Manage Access** in the server
-3. Roles are created with explicit tool access
-4. Roles are assigned to members
-5. Members interact only with tools permitted by their roles
+Managing roles and assigning them to members is central to controlling access in MCP Express. Properly defining roles ensures that team members can only access the tools they need, keeping your server secure, predictable, and auditable.
 
 :::note
-Changes to a role take effect immediately for all assigned members.
+Only admins of the organization can create roles or assign them to members. Ensure you have the required permissions before performing these actions.
 :::
 
-![RBAC Flow](/resources/security/rbac-flow.png)
+Follow the steps below to create roles and assign them to members.
 
-## Access Evaluation
+### Step 1: Create a Role
 
-When a member requests access to a tool:
+1. Navigate to your server and open **Manage Access**.
+2. Click **Create Role**.
+3. Define the role name, role description, and select the tools that members assigned to this role can access.
+4. Save the role. Changes take effect immediately.
 
-1. All roles assigned to the member are retrieved
-2. Tool access is aggregated across these roles
-3. The requested tool is verified against the aggregated access
+   ![Create Role](/resources/security/rbac/create-role.gif)
 
-- **Tool included** → Access is granted
-- **Tool absent** → Access is denied
-
-:::danger
-Access is strictly enforced. Tools must be explicitly permitted through roles; there is no fallback.
+:::tip
+Design roles based on tool usage rather than job titles. Focus on the tools a member truly needs to perform their tasks. This approach keeps access predictable, auditable, and aligned with responsibilities, while also making future role reviews and audits simpler.
 :::
 
-## Design Principles
+### Step 2: Assign Role to a Member
 
-RBAC in MCP Express is based on four foundational principles:
+1. In **Manage Access**, select the member you want to assign.
+2. Choose the appropriate role from the list. Remember, each member can have **only one role per server**.
+3. Confirm the assignment. The member now has access only to tools allowed by the role.
 
-- **Explicit Access:** Permissions must be deliberately defined. No implicit access
-- **Minimal Complexity:** Avoid multi-level permissions and inheritance chains
-- **Strong Isolation:** Each server is an independent access control domain
-- **Predictable Behavior:** Decisions are deterministic and based on exact matches
+   ![Assign Role to Member](/resources/security/rbac/assign-role.gif)
 
-## Example Scenario
+:::tip
+Always review role assignments after creating new roles or adding members. Proper assignment prevents conflicts, ensures clear accountability, and makes it easy to identify gaps or unnecessary access during periodic audits. Regular reviews help maintain a secure and organized server environment.
+:::
 
-A server contains tools for distinct functional areas:
+## Example Scenario: Role-Based Access in Action
+
+Consider a server in MCP Express with tools assigned for specific functional areas:
 
 - **Developer Role:** Access to development tools only
 - **Finance Role:** Access to finance tools only
+- **Support Role:** Access to customer support tools only
+
+**Scenario:**
+
+Without explicit role assignments, team members could inadvertently access tools outside their responsibilities, increasing operational risk and creating potential for errors. By implementing RBAC:
+
+- Developers are restricted to development tools, preventing unintended modifications in financial or support workflows.
+- Finance staff can only access financial tools, safeguarding sensitive financial data.
+- Support members access only customer support tools, maintaining operational focus and avoiding conflicts with other teams.
 
 **Outcome:**
 
-- Developers interact exclusively with development tools
-- Finance members interact exclusively with finance tools
-- Access overlap occurs only when explicitly configured
+- Access is controlled, predictable, and aligned with team responsibilities.
+- Overlap occurs only when explicitly configured, supporting clear separation of duties.
+- Administrators can audit roles and permissions efficiently, maintaining compliance and accountability.
 
 :::tip
-This enforces clear separation of responsibilities while remaining manageable.
+Periodically review role assignments to maintain clear accountability, prevent unnecessary access, and catch outdated or misassigned permissions. This practice ensures a secure, organized, and reliable server environment for all teams.
 :::
 
 ## Best Practices
 
-- **Apply Least Privilege:** Grant access only to the tools a role genuinely requires
-- **Keep Roles Focused:** Avoid grouping unrelated tools in one role
-- **Standardize Role Design:** Maintain consistent naming and scoping conventions
-- **Review Access Periodically:** Remove unused roles and revoke outdated permissions
+- **Apply Least Privilege:** Grant access only to the tools a role genuinely requires.
+- **Keep Roles Focused:** Avoid grouping unrelated tools in one role.
+- **Standardize Role Design:** Maintain consistent naming and scoping conventions.
+- **Review Access Periodically:** Remove unused roles and revoke outdated permissions.
 
-:::info
-A simplified permission model reduces operational risk and improves auditability.
+:::warning
+Neglecting best practices can lead to permission sprawl, unintended access, and potential security risks. Always follow a structured approach to maintain control.
 :::
 
-## Why This Approach
-
-MCP Express avoids complexity by design:
-
-- No permission hierarchies
-- No ambiguous or inherited access levels
-- No hidden or implicit behavior
-
 :::tip
-This produces a system that is straightforward to understand, audit, and scale.
+Regularly review role assignments to detect gaps, prevent unnecessary access, and maintain accountability. Consistent audits ensure your server environment remains secure and organized.
 :::
 
 ## Summary
 
-RBAC in MCP Express ensures:
+RBAC in MCP Express provides a clear, maintainable, and predictable framework for controlling access at the tool level within each server. Roles group tool permissions into structured units, and members acquire access solely through their assigned role. This approach ensures consistent enforcement, minimizes operational risk, and supports efficient auditing and compliance.
 
-- **Scope:** Access is controlled at the server level
-- **Granularity:** Permissions are defined at the tool level
-- **Structure:** Roles group tool access into manageable units
-- **Inheritance:** Members acquire access solely through role assignment
-
-:::info
-This approach delivers clarity, maintainability, and confidence at every layer of access control.
-:::
+For any issues or questions related to RBAC, you can reach out to our [support team](https://app.mcp-express.com/support). They are available to assist if you encounter problems.
