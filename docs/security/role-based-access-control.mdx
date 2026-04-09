@@ -1,3 +1,9 @@
+---
+title: Role-Based Access Control (RBAC)
+sidebar_position: 1
+sidebar_label: 'Role-Based Access Control'
+---
+
 # Role-Based Access Control (RBAC)
 
 Role-Based Access Control (RBAC) in **MCP Express** provides a structured, auditable mechanism for managing tool-level access within servers. Permissions are granted through roles assigned to members, resulting in a model that is explicit, deterministic, and maintainable at scale.
@@ -6,9 +12,9 @@ Role-Based Access Control (RBAC) in **MCP Express** provides a structured, audit
 
 Role-Based Access Control (RBAC) in **MCP Express** allows you to control which tools members can access within a server. Access is managed by assigning **roles** to members. Each role defines the set of tools a member is allowed to use.
 
-- **Server-scoped access control** : Access is isolated to each server. Roles and permissions are defined and enforced independently per server.
-- **Role-based tool access** : Roles act as containers for tool access, determining which tools a member can interact with.
-- **Explicit permission model** : Members can only access tools that are explicitly included in their assigned roles.
+- **Server-scoped access control**: Access is isolated to each server. Roles and permissions are defined and enforced independently per server.
+- **Role-based tool access**: Roles act as containers for tool access, determining which tools a member can interact with.
+- **Explicit permission model**: Members can only access tools that are explicitly included in their assigned roles.
 
 :::note
 A member can only use tools that are explicitly allowed by their assigned roles.
@@ -99,9 +105,6 @@ Without explicit role assignments, team members could inadvertently access tools
 - Overlap occurs only when explicitly configured, supporting clear separation of duties.
 - Administrators can audit roles and permissions efficiently, maintaining compliance and accountability.
 
-:::tip
-Periodically review role assignments to maintain clear accountability, prevent unnecessary access, and catch outdated or misassigned permissions. This practice ensures a secure, organized, and reliable server environment for all teams.
-:::
 
 ## Best Practices
 
@@ -115,11 +118,11 @@ Neglecting best practices can lead to permission sprawl, unintended access, and 
 :::
 
 :::tip
-Regularly review role assignments to detect gaps, prevent unnecessary access, and maintain accountability. Consistent audits ensure your server environment remains secure and organized.
+Periodically review role assignments to maintain clear accountability, prevent unnecessary access, and catch outdated or misassigned permissions. This practice ensures a secure, organized, and reliable server environment for all teams.
 :::
 
 ## Summary
 
 RBAC in MCP Express provides a clear, maintainable, and predictable framework for controlling access at the tool level within each server. Roles group tool permissions into structured units, and members acquire access solely through their assigned role. This approach ensures consistent enforcement, minimizes operational risk, and supports efficient auditing and compliance.
 
-For any issues or questions related to RBAC, please contact our support team at [MCP Express Support](mailto:support@mcp-express.com) for assistance.
+For any issues or questions related to RBAC, please contact our support team at [MCP Express Support](https://app.mcp-express.com/support) for assistance.
