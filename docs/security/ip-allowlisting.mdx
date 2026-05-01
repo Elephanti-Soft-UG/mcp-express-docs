@@ -9,14 +9,14 @@ sidebar_label: 'IP Allowlisting'
 MCP Express uses a single static egress IP for all outbound connections. If your infrastructure restricts inbound access by source IP, you need to explicitly allowlist this address to allow MCP Express to reach your data sources.
 
 :::tip
-For a conceptual explanation of what a static egress IP is and how it fits the MCP architecture, see [Static Egress IP](../advanced/static-ip-address) in the Advanced section.
+For a conceptual explanation of what a static egress IP is and how it fits the MCP architecture, see [Static Egress IP](/docs/advanced/static-ip-address) in the Advanced section.
 :::
 
 ## MCP Express Public IP Address
 
 | Property | Value |
 |---|---|
-| IP Address | [See Static Egress IP](../advanced/static-ip-address) |
+| IP Address | [See Static Egress IP](/docs/advanced/static-ip-address) |
 | Type | IPv4 |
 
 ## When You Need to Allowlist
@@ -33,7 +33,7 @@ If your integration target accepts connections from any IP address, no additiona
 
 ## Configuring the Allowlist
 
-The exact steps depend on your infrastructure. In general, you need to add an inbound rule that permits TCP traffic from the [MCP Express IP address](../advanced/static-ip-address) on the port your service listens on.
+The exact steps depend on your infrastructure. In general, you need to add an inbound rule that permits TCP traffic from the [MCP Express IP address](/docs/advanced/static-ip-address) on the port your service listens on.
 
 Common examples:
 
@@ -62,6 +62,6 @@ IP allowlisting is a network-level control, not a substitute for authentication 
 
 ## Summary
 
-To enable MCP Express to connect to a resource that enforces IP-based access control, add the [MCP Express IP address](../advanced/static-ip-address) to your inbound allowlist on the relevant port. Pair this with strong authentication and TLS to maintain a layered security posture.
+To enable MCP Express to connect to a resource that enforces IP-based access control, add the [MCP Express IP address](/docs/advanced/static-ip-address) to your inbound allowlist on the relevant port. Pair this with strong authentication and TLS to maintain a layered security posture.
 
-For questions or connectivity issues, contact our support team at [MCP Express Support](https://app.mcp-express.com/support).
+For questions or connectivity issues, contact our support team at [MCP Express Support](mailto:hello@mcp-express.com).

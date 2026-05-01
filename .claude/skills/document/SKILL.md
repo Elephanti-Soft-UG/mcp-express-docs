@@ -48,3 +48,5 @@ The following is our standard on how we document things. It is necessary that we
 1. The root segments: get-started, integrations, security and advanced always have an auto generated index page.
 2. The any subfolder that group similar ideas need a custom index, an example can be seen in [example-sub-group](./subgroup-example)
 3. Integrations have a strict format as well, an example can be seen in [example-integration](./integration-example)
+4. Always use full paths on links and not relative paths. eg. `/docs/advanced/static-ip-address`.
+5. If you have to write contact us then, you should have a mailto link to hello@mcp-express.com
