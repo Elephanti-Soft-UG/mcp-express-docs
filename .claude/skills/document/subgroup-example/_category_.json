@@ -1,0 +1,8 @@
+{
+  "label": "Some Label",
+  "position": 1,
+  "link": {
+    "id": "group/sub-group/index",
+    "type": "doc"
+  }
+}

@@ -1,0 +1,67 @@
+---
+title: IP Allowlisting
+sidebar_position: 2
+sidebar_label: 'IP Allowlisting'
+---
+
+# IP Allowlisting
+
+MCP Express uses a single static egress IP for all outbound connections. If your infrastructure restricts inbound access by source IP, you need to explicitly allowlist this address to allow MCP Express to reach your data sources.
+
+:::tip
+For a conceptual explanation of what a static egress IP is and how it fits the MCP architecture, see [Static Egress IP](../advanced/static-ip-address) in the Advanced section.
+:::
+
+## MCP Express Public IP Address
+
+| Property | Value |
+|---|---|
+| IP Address | [See Static Egress IP](../advanced/static-ip-address) |
+| Type | IPv4 |
+
+## When You Need to Allowlist
+
+You should add the MCP Express IP address to your allowlist if any of the following apply:
+
+- Your database or service is behind a firewall that restricts inbound connections by source IP.
+- Your cloud provider (e.g., AWS, GCP, Azure) has security group or VPC rules that limit allowed source addresses.
+- Your REST API or internal service enforces IP-based access control policies.
+
+:::note
+If your integration target accepts connections from any IP address, no additional configuration is required.
+:::
+
+## Configuring the Allowlist
+
+The exact steps depend on your infrastructure. In general, you need to add an inbound rule that permits TCP traffic from the [MCP Express IP address](../advanced/static-ip-address) on the port your service listens on.
+
+Common examples:
+
+| Service | Default Port |
+|---|---|
+| PostgreSQL | `5432` |
+| MySQL | `3306` |
+| MSSQL | `1433` |
+| DynamoDB (via HTTPS) | `443` |
+
+Refer to your cloud provider or firewall documentation for the specific steps to add an inbound IP allowlist rule.
+
+:::tip
+Scope your firewall rule to the specific port your service uses. Avoid opening a broad port range — permitting only the required port limits exposure even while allowing the MCP Express IP.
+:::
+
+## Best Practices
+
+- **Do not rely on IP allowlisting alone.** Always require strong authentication credentials for your data source in addition to network-level restrictions.
+- **Enforce encrypted connections.** Require TLS/SSL for all connections to protect data in transit.
+- **Review allowlist rules periodically.** Remove any stale or unnecessary entries as your infrastructure evolves.
+
+:::warning
+IP allowlisting is a network-level control, not a substitute for authentication and encryption. A compromised credential from an allowlisted IP can still result in unauthorized access.
+:::
+
+## Summary
+
+To enable MCP Express to connect to a resource that enforces IP-based access control, add the [MCP Express IP address](../advanced/static-ip-address) to your inbound allowlist on the relevant port. Pair this with strong authentication and TLS to maintain a layered security posture.
+
+For questions or connectivity issues, contact our support team at [MCP Express Support](https://app.mcp-express.com/support).

@@ -1,0 +1,233 @@
+---
+title: Connect MCP Express with OAuth
+sidebar_position: 1
+sidebar_label: 'OAuth Authorization'
+---
+
+# Connect MCP Express with OAuth
+
+Learn how to connect your AI tool to an MCP Express server using MCP OAuth.
+
+Once connected, your AI tool will have access to every tool you've built and published on your authorized server.
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- An active [MCP Express account](https://app.mcp-express.com) with at least one server configured
+- An AI tool that supports remote MCP servers
+
+:::tip
+Not sure if your tool supports MCP? Look for **Model Context Protocol** or **MCP server support** in its documentation.
+:::
+
+## Step 1: Configure your AI tool
+
+Choose your AI client and follow the setup instructions below.
+
+### Claude Code
+
+Run the following command:
+
+```bash
+claude mcp add --transport http mcp-express https://api.mcp-express.com/gateway/mcp
+```
+
+Then run: `/mcp` and complete the authorization flow when prompted.
+
+:::info
+Need more details on setup, commands, and MCP behavior in Claude Code? [View Claude Code docs](https://docs.anthropic.com/en/docs/claude-code/mcp)
+:::
+
+### Cursor
+
+1. Open **Cursor Settings → MCP → Add new global MCP server**
+2. Paste:
+
+```json
+{
+  "mcpServers": {
+    "mcp-express": {
+      "url": "https://api.mcp-express.com/gateway/mcp"
+    }
+  }
+}
+```
+
+3. Save and restart Cursor
+4. Trigger any MCP tool and complete authorization
+
+:::tip
+You can share this configuration with your team by adding a .cursor/mcp.json file to your project’s root directory.
+:::
+
+:::info
+Learn how Cursor integrates with MCP servers and manages context. [View Cursor MCP docs](https://cursor.com/docs/mcp#why-use-mcp)
+:::
+
+### VS Code
+
+1. Create `.vscode/mcp.json`:
+
+```json
+{
+  "servers": {
+    "mcp-express": {
+      "type": "http",
+      "url": "https://api.mcp-express.com/gateway/mcp"
+    }
+  }
+}
+```
+
+2. Open Command Palette (`Ctrl+Shift+P`)
+3. Run **MCP: List Servers**
+4. Start MCP Express and complete authorization
+
+:::tip
+Use **MCP: Open User Configuration** to apply this configuration across all workspaces.
+:::
+
+:::info
+Explore how MCP servers work within VS Code and how to manage them effectively. [View VS Code MCP docs](https://code.visualstudio.com/docs/copilot/chat/mcp-servers)
+:::
+
+### Claude Desktop
+
+1. Open **Settings → Connectors**
+2. Click **Add Connector**
+3. Enter:
+
+```
+https://api.mcp-express.com/gateway/mcp
+```
+
+4. Complete the authorization flow
+
+:::info
+Read more about configuring connectors and using MCP servers in Claude Desktop. [View Claude Desktop docs](https://platform.claude.com/docs/en/agents-and-tools/remote-mcp-servers)
+:::
+
+### Windsurf
+
+1. Open Settings (`Cmd + ,`)
+2. Search for **MCP**
+3. Open `mcp_config.json`
+4. Add:
+
+```json
+{
+  "mcpServers": {
+    "mcp-express": {
+      "serverUrl": "https://api.mcp-express.com/gateway/mcp"
+    }
+  }
+}
+```
+
+5. Save and restart Windsurf
+6. Complete authorization when prompted
+
+:::info
+Understand how MCP configuration works in Windsurf and how to extend it. [View Windsurf MCP docs](https://docs.windsurf.com/windsurf/cascade/mcp#model-context-protocol-mcp)
+:::
+
+### Codex
+
+1. Open your Codex configuration file:
+
+```
+~/.codex/config.toml
+```
+
+2. Add the MCP server configuration:
+
+```toml
+[mcp_servers.mcp-express]
+url = "https://api.mcp-express.com/gateway/mcp"
+```
+
+3. Run the following command:
+
+```bash
+codex mcp login mcp-express
+```
+
+4. Complete authorization
+
+:::tip
+Use a `.codex/config.toml` file in your project root to share configuration across your team.
+:::
+
+:::info
+For deeper guidance on authentication, configuration, and MCP usage in Codex: [View Codex MCP docs](https://developers.openai.com/codex/mcp/)
+:::
+
+### Other tools
+
+If your AI tool supports MCP, connect using:
+
+```
+https://api.mcp-express.com/gateway/mcp
+```
+
+Most tools accept either a direct URL or a JSON configuration.
+
+## Step 2: Authorize access
+
+Once configured, your AI tool will open a browser window.
+
+![MCP Express Authorization Screen](/resources/get-started/authorization-guide/mcp_express_authorization_screen.gif)
+
+1. Select your **Authentication Server**
+2. Click **Authorize**
+3. You will be redirected back to your AI tool
+
+## Available tools
+
+After authorization, your AI assistant will have access to all tools published on your server.
+
+To view available tools, ask:
+
+```
+What tools do you have access to? Use MCP.
+```
+
+Your AI assistant will list all available tools on your authorized server, along with a brief description of each.
+
+If a tool is missing, ensure you are connected to the correct server and check your [MCP Express servers](https://app.mcp-express.com/projects)
+
+## Troubleshooting
+
+<details>
+<summary><strong>Authorization issues</strong></summary>
+
+- Make sure you complete the OAuth flow when prompted
+- Try disconnecting and reconnecting the integration
+- Look for a **“Clear authentication”** or **“Disconnect”** option in your AI tool’s MCP settings
+
+</details>
+
+<details>
+<summary><strong>No tools or changes not reflecting</strong></summary>
+
+- Ensure you are connected to the correct MCP server
+- Verify the server contains the expected tools
+- Reconnect to refresh the session or trigger a fresh MCP request in your AI tool
+
+</details>
+
+<details>
+<summary><strong>No tools are showing after connecting</strong></summary>
+
+- Ensure you are connected to the correct MCP server
+- Verify the server you selected contains the expected tools
+- Reconnect to refresh the session
+
+</details>
+
+For any issues not covered above, or if you need further assistance, please contact our support team: [MCP Express Support](https://app.mcp-express.com/support)
+
+## Unsupported Tools
+
+If your AI client does not support MCP OAuth, it is recommended to use **Client Credentials** as an alternative. Refer to the [MCP Express Client Credentials Guide](client_credential_authorization) for detailed instructions on securely configuring access to all tools on your authorized server.
