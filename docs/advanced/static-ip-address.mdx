@@ -1,0 +1,45 @@
+---
+sidebar_position: 4
+sidebar_label: 'Static Egress IP'
+---
+
+# Static Egress IP
+
+MCP Express routes all outbound traffic through a single, fixed public IP address. Understanding this design helps you reason about network boundaries, trust models, and connectivity when deploying integrations.
+
+## What Is a Static Egress IP?
+
+When MCP Express establishes a connection to an external resource — such as a database, a REST API, or a cloud service — that connection originates from a specific IP address on the internet. A **static egress IP** means this source address is fixed and predictable: it will always be the same value, regardless of which server, tool, or integration initiated the request.
+
+MCP Express egresses all outbound traffic from:
+
+```
+52.59.15.77
+```
+
+## Why MCP Express Uses a Static Egress IP
+
+MCP Express runs as a managed, multi-tenant platform. Rather than assigning dynamic or per-tenant IPs, all outbound traffic is consolidated through a single fixed address. This design has two main consequences:
+
+- **Predictability**: The IP address is known in advance and does not change. You can reliably reference it in firewall rules, security group policies, or access control lists.
+- **Simplicity**: There is no per-server, per-tool, or per-region variation to account for. A single allowlist entry covers all connectivity from MCP Express to your infrastructure.
+
+## How It Fits the MCP Architecture
+
+In the MCP model, your MCP Server acts as the bridge between the LLM and your data sources. When a tool is invoked, MCP Express initiates an outbound connection from its infrastructure to your resource. From the perspective of your database or API, this connection arrives from `52.59.15.77`.
+
+```
+LLM → MCP Express (52.59.15.77) → Your Data Source
+```
+
+This means your data source only needs to trust one external IP address to accept connections from MCP Express, regardless of how many tools or servers you have configured.
+
+:::tip
+For a broader understanding of how MCP Servers, Clients, and Tools relate to each other, see [Core Concepts](./core_concepts).
+:::
+
+## Implications for Connectivity
+
+If your data source is publicly accessible, no additional network configuration is needed. The static IP becomes relevant when your infrastructure enforces network-level restrictions on inbound connections.
+
+For practical guidance on enabling selective access — including when and how to allowlist this IP — see the [IP Allowlisting](/docs/security/ip-allowlisting) page in the Security section.

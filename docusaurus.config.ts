@@ -35,7 +35,7 @@ const config: Config = {
         },
         googleAnalytics: {
           anonymizeIP: true,
-          trackingID: 'G-EBCRH32SMD',
+          trackingID: 'G-QEDPVND8HS',
         },
       } satisfies Preset.Options,
     ],

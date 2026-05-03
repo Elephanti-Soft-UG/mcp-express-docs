@@ -1,0 +1,8 @@
+{
+  "label": "[Integration Name]",
+  "position": 4,
+  "link": {
+    "type": "doc",
+    "id": "integrations/[integration name]/index"
+  }
+}
