@@ -1,0 +1,33 @@
+---
+sidebar_label: Security and Patterns
+sidebar_position: 3
+---
+
+# Security & Implementation Patterns
+
+This section highlights security guidance and operational patterns for SFTP integrations.
+
+## Authentication Hardening
+- Prefer key-based authentication over passwords for production environments.
+- Store private keys in a secure location with file permissions set to 600.
+- Use a dedicated service account with limited access to required directories only.
+
+## Path Safety
+- Avoid exposing unbounded template variables in `remote_path` or `remote_file_path`.
+- Use allowlists for base directories and validate path segments before execution.
+- Disable or constrain recursive operations when directory depth is large.
+
+## Result and Recursion Limits
+- Keep `max_results` conservative for search and list operations to avoid oversized responses.
+- Limit recursive search depth to prevent long-running traversals.
+- Prefer targeted patterns over broad wildcards like `*`.
+
+## Secrets Handling
+- Do not hardcode credentials in tool definitions or prompt templates.
+- Use environment variables or secret managers for passwords and key paths.
+- Rotate credentials regularly and revoke unused keys.
+
+## Reliability Patterns
+- Validate connectivity with a test connection before enabling tools.
+- Monitor for repeated authentication failures and disable the tool if needed.
+- Use distinct directories for uploads to separate input from processed files.

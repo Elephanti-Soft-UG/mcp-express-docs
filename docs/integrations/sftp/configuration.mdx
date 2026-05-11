@@ -1,0 +1,114 @@
+---
+sidebar_label: Configuration
+sidebar_position: 2
+---
+
+# Configuration
+
+SFTP tools are action-based. Each tool includes a base connection configuration plus an `action` field that selects the operation to perform.
+
+## Base Configuration
+
+| Parameter | Description | Required |
+| --- | --- | --- |
+| hostname | SFTP server hostname or IP address. | Yes |
+| port | SFTP port (Default: 22). | Optional |
+| username | Username for authentication. | Yes |
+| password | Password for authentication. | Yes (if no private_key) |
+| private_key | Path to SSH private key. | Yes (if no password) |
+
+## Template Variables
+
+Paths and content fields support Jinja2 templates. Provide variables through the tool `args` object.
+
+```json
+{
+  "config": {
+    "action": "read",
+    "hostname": "sftp.example.com",
+    "username": "user",
+    "password": "password",
+    "remote_file_path": "/data/{{ year }}/{{ month }}/report.csv"
+  },
+  "args": {
+    "year": "2024",
+    "month": "01"
+  }
+}
+```
+
+## Available Actions
+
+### Search
+Search for files that match a pattern within a directory.
+
+```json
+{
+  "action": "search",
+  "remote_path": "/uploads",
+  "pattern": "*.log",
+  "recursive": true,
+  "max_results": 100
+}
+```
+
+### Read
+Read file contents. Use `encoding` to control output format.
+
+```json
+{
+  "action": "read",
+  "remote_file_path": "/data/config.json",
+  "encoding": "auto"
+}
+```
+
+### Write
+Write text content to a remote file.
+
+```json
+{
+  "action": "write",
+  "remote_file_path": "/data/output.txt",
+  "file_content": "Content to write",
+  "encoding": "utf-8",
+  "overwrite": true
+}
+```
+
+### Upload
+Upload a local file to the remote server.
+
+```json
+{
+  "action": "upload",
+  "local_file_path": "/home/user/document.pdf",
+  "remote_file_path": "/uploads/document.pdf",
+  "overwrite": false
+}
+```
+
+### Download
+Download a remote file to the local system.
+
+```json
+{
+  "action": "download",
+  "remote_file_path": "/backups/data.tar.gz",
+  "local_file_path": "/home/user/downloads/data.tar.gz",
+  "overwrite": true
+}
+```
+
+### List
+List files and directories for a given path.
+
+```json
+{
+  "action": "list",
+  "remote_path": "/data",
+  "recursive": false,
+  "include_hidden": false,
+  "max_results": 1000
+}
+```

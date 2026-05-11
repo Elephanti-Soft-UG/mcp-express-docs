@@ -1,0 +1,8 @@
+{
+  "label": "SFTP",
+  "position": 8,
+  "link": {
+    "type": "doc",
+    "id": "integrations/sftp/index"
+  }
+}
