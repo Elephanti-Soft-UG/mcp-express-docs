@@ -1,0 +1,8 @@
+{
+  "label": "PostgreSQL",
+  "position": 4,
+  "link": {
+    "type": "doc",
+    "id": "integrations/postgresql/index"
+  }
+}

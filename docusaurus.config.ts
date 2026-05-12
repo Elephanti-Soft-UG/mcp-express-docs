@@ -1,0 +1,108 @@
+import { themes as prismThemes } from 'prism-react-renderer'
+import type { Config } from '@docusaurus/types'
+import type * as Preset from '@docusaurus/preset-classic'
+
+// This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
+
+const config: Config = {
+  title: 'MCP Express',
+  tagline: 'Unleash AI Potential with Custom MCP Tools',
+  favicon: 'img/favicon.ico',
+  future: { v4: true },
+  url: 'https://elephanti-soft-ug.github.io',
+  baseUrl: '/',
+  organizationName: 'Elephanti Soft UG',
+  projectName: 'mcp-express-docs',
+  onBrokenLinks: 'throw',
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en'],
+  },
+  presets: [
+    [
+      'classic',
+      {
+        docs: {
+          sidebarPath: './sidebars.ts',
+          editUrl: undefined,
+        },
+        theme: {
+          customCss: './src/css/custom.css',
+        },
+        sitemap: {
+          changefreq: 'weekly',
+          priority: 0.5,
+        },
+        googleAnalytics: {
+          anonymizeIP: true,
+          trackingID: 'G-QEDPVND8HS',
+        },
+      } satisfies Preset.Options,
+    ],
+  ],
+  themeConfig: {
+    image: 'img/mcp-express-social-card.png',
+    colorMode: {
+      respectPrefersColorScheme: true,
+    },
+    navbar: {
+      logo: {
+        width: 180,
+        height: 180,
+        alt: 'MCP Express Logo',
+        src: 'img/logo.svg',
+        srcDark: 'img/logo-dark.svg',
+        href: '/docs/get-started/overview',
+      },
+      items: [
+        {
+          type: 'docSidebar',
+          sidebarId: 'documentationSidebar',
+          position: 'left',
+          label: 'Documentation',
+        },
+        {
+          href: 'https://app.mcp-express.com/login',
+          label: 'Login',
+          position: 'right',
+        },
+        {
+          href: 'https://app.mcp-express.com/signup',
+          label: 'Get Started for Free',
+          position: 'right',
+        },
+      ],
+    },
+    prism: {
+      theme: prismThemes.github,
+      darkTheme: prismThemes.dracula,
+    },
+    metadata: [
+      {
+        name: 'keywords',
+        content:
+          'MCP Express, AI tools, custom tools, AI agents, documentation, API reference, user guides',
+      },
+      {
+        name: 'description',
+        content:
+          'MCP Express is a powerful platform that allows you to create custom tools for AI agents. Our documentation provides comprehensive guides, API references, and best practices to help you unleash the full potential of your AI applications.',
+      },
+    ],
+  } satisfies Preset.ThemeConfig,
+  headTags: [
+    {
+      tagName: 'script',
+      attributes: { type: 'application/ld+json' },
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org/',
+        '@type': 'Organization',
+        name: 'MCP Express',
+        url: 'https://docs.mcp-express.com/',
+        logo: 'https://docs.mcp-express.com/img/logo.svg',
+      }),
+    },
+  ],
+}
+
+export default config

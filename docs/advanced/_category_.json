@@ -1,0 +1,8 @@
+{
+  "label": "Advanced",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "Learn about the advanced concepts of MCP Express, including how to manage client credentials and implement secure authorization flows for your AI tools."
+  }
+}

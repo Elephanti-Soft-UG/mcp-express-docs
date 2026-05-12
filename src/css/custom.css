@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #af8bff;
+  --ifm-color-primary-dark: #9464ff;
+  --ifm-color-primary-darker: #8650ff;
+  --ifm-color-primary-darkest: #5d15ff;
+  --ifm-color-primary-light: #cab2ff;
+  --ifm-color-primary-lighter: #d8c6ff;
+  --ifm-color-primary-lightest: #ffffff;
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #af8bff;
+  --ifm-color-primary-dark: #9464ff;
+  --ifm-color-primary-darker: #8650ff;
+  --ifm-color-primary-darkest: #5d15ff;
+  --ifm-color-primary-light: #cab2ff;
+  --ifm-color-primary-lighter: #d8c6ff;
+  --ifm-color-primary-lightest: #ffffff;
+}
+
+html {
+  scroll-behavior: smooth;
+}

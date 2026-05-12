@@ -6,12 +6,12 @@
 
 ### Connection Parameters
 
-| Parameter | Required | Description |
-|-----------|----------|-------------|
-| [parameter_name_1] | Yes/No | [Description of what this parameter does] |
-| [parameter_name_2] | Yes/No | [Description of what this parameter does] |
-| [parameter_name_3] | Yes/No | [Description of what this parameter does] |
-| [parameter_name_4] | Yes/No | [Description of what this parameter does] |
+| Parameter          | Required | Description                               |
+| ------------------ | -------- | ----------------------------------------- |
+| [parameter_name_1] | Yes/No   | [Description of what this parameter does] |
+| [parameter_name_2] | Yes/No   | [Description of what this parameter does] |
+| [parameter_name_3] | Yes/No   | [Description of what this parameter does] |
+| [parameter_name_4] | Yes/No   | [Description of what this parameter does] |
 
 ### Setting Up [Integration Name] Integration
 
@@ -21,31 +21,36 @@
 4. **[Additional Setup Step]**: [Description of any other required setup steps]
 5. **Test Connection**: Use the built-in connection test to verify your setup works correctly
 
-![Integration Configuration](images/[integration-name]-config.png)
+![Integration Configuration](/resources/integrations/[integration-name]-config.png)
 
-*[Caption describing what the screenshot shows]*
+_[Caption describing what the screenshot shows]_
 
 ## Authentication Methods
 
 [If the integration supports authentication, detail the methods here. Otherwise, remove this section.]
 
 ### [Authentication Method 1]
+
 [Description of when to use this method]
 
 **Required Fields:**
+
 - [Field 1]: [Description]
 - [Field 2]: [Description]
 
 ### [Authentication Method 2]
+
 [Description of when to use this method]
 
 **Required Fields:**
+
 - [Field 1]: [Description]
 - [Field 2]: [Description]
 
 ## [Integration-Specific Feature Section]
 
 [Add sections specific to this integration. For example:
+
 - "Query Templates" for database integrations
 - "HTTP Methods" for API integrations
 - "Data Formats" for file-based integrations
@@ -56,6 +61,7 @@
 [Detailed explanation of the feature]
 
 **Example:**
+
 ```
 [Code or configuration example]
 ```
@@ -65,6 +71,7 @@
 [Detailed explanation of the feature]
 
 **Example:**
+
 ```
 [Code or configuration example]
 ```
@@ -78,6 +85,7 @@
 [Description of the security feature and how to use it]
 
 **Best practices:**
+
 - [Best practice 1]
 - [Best practice 2]
 - [Best practice 3]
@@ -87,6 +95,7 @@
 ### 1. [Use Case Category 1]
 
 [Description of this category of use cases]:
+
 - [Specific use case example 1]
 - [Specific use case example 2]
 - [Specific use case example 3]
@@ -95,6 +104,7 @@
 ### 2. [Use Case Category 2]
 
 [Description of this category of use cases]:
+
 - [Specific use case example 1]
 - [Specific use case example 2]
 - [Specific use case example 3]
@@ -103,6 +113,7 @@
 ### 3. [Use Case Category 3]
 
 [Description of this category of use cases]:
+
 - [Specific use case example 1]
 - [Specific use case example 2]
 - [Specific use case example 3]

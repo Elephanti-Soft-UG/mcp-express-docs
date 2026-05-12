@@ -1,0 +1,29 @@
+---
+sidebar_label: Integration
+sidebar_position: 1
+---
+
+# PostgreSQL Integration
+
+To interface your MCP server with a PostgreSQL instance, you must define the connection parameters and establish a secure handshake. This process ensures the server can successfully orchestrate query execution and schema inference.
+
+## Connection Parameters
+Configure the following fields to authorize .... 
+
+| Parameter     | Technical Description                                | Required               |
+|---------------|------------------------------------------------------|------------------------|
+| Parameter 1   | Parameter Description                                | Yes                    |
+| Parameter 2   | Parameter Description                                | Optional               |
+
+
+:::warning Warning if available
+Unbounded time ranges or broad log group patterns can increase cost and latency. Always constrain Log Group, Start Time, End Time, and Query.
+
+Be cautious with `{{ }}` placeholders—treat inputs as untrusted. Enforce allowlists, bounded limits, and restricted log group scopes to prevent excessive query expansion and unpredictable costs.
+:::
+
+:::tip Tip if needed
+Use AWS credentials limited to required CloudWatch Logs Insights actions and approved log resources only.
+:::
+
+[Other relevant topics in their own headings]

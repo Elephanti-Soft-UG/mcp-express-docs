@@ -1,0 +1,23 @@
+---
+sidebar_position: 3
+sidebar_label: 'Testing Your Server'
+---
+# Testing Your Server
+
+The **Testing Tool** provides a sandboxed environment to validate your tool definitions and data outputs before exposing them to an LLM. This ensures that your SQL templates, dynamic variables, and connection strings are functioning as intended.
+
+## Prerequisites
+Before initiating a test, ensure you have the following components provisioned:
+- **Active MCP Server**: A server with a "Connected" status.
+- **Defined Tools**: At least one tool mapped via the Guided or Custom SQL Editor.
+- **Registered Client**: A valid client configuration to route the JSON-RPC requests.
+## Test you Tools
+Follow this workflow to verify your tool's execution lifecycle:
+
+
+![Testing MCP Tools](/resources/test_tool_demo.gif)
+
+- **Select Your Server**: Choose the specific server instance from your dashboard.
+- **Choose a Tool**: The interface will populate a list of all schema-validated tools associated with that server.
+- **Provide Input Arguments**: If your tool uses dynamic templates (e.g., `{{user_id}}`), the tester will generate input fields for these variables.
+- **Execute & Inspect**: Trigger the tool and review the raw JSON-RPC response.
