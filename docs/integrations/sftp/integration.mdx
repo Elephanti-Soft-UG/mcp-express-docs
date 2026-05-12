@@ -1,0 +1,37 @@
+---
+sidebar_label: Integration
+sidebar_position: 1
+---
+
+# SFTP Integration
+
+To connect MCP Express to an SFTP server, define the connection parameters and validate access. This establishes a secure channel for file operations and ensures the server can read directory metadata safely.
+
+## Connection Parameters
+
+Configure the following fields to authorize the MCP server. Use a dedicated service account with minimal privileges to maintain strict data governance.
+
+| Parameter | Technical Description | Required |
+| --- | --- | --- |
+| Hostname | SFTP server hostname or IP address. Accepts `hostname` or `host`. | Yes |
+| Port | SSH port for SFTP (Default: 22). | Optional |
+| Username | Account used to authenticate to the server. | Yes |
+| Password | Password-based authentication. | Yes (if no private key) |
+| Private Key Path | Path to the SSH private key file. | Yes (if no password) |
+
+:::warning Authentication Requirement
+You must provide either `password` or `private_key`. Avoid configuring both unless required by your SSH policy.
+:::
+
+:::tip Network Access
+Ensure the MCP server can reach the SFTP host on the configured port and that firewalls allow inbound SSH access.
+:::
+
+## Connection Validation
+
+When you test the connection, MCP Express performs the following checks:
+- **Credential Verification**: Confirms the username and authentication method.
+- **Handshake Validation**: Verifies SSH negotiation and session setup.
+- **Root Listing**: Attempts a lightweight directory listing to confirm access.
+
+If validation fails, the test output includes the error type and message to help you resolve connectivity or permission issues.
