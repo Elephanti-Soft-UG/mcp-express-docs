@@ -5,20 +5,25 @@ sidebar_position: 2
 
 # Configuration
 
-SFTP tools are action-based. Each tool includes a base connection configuration plus an `action` field that selects the operation to perform.
+Configuration defines how MCP Express exposes SFTP operations as callable tools. Each tool uses a base connection plus an `action` field to select the operation at runtime.
 
-## Base Configuration
+## Tool Orchestration
+SFTP uses an action-oriented setup. A single tool can perform different operations by switching the `action` field while retaining shared connection settings.
+
+## Configuration Setup
+Define the connection scope once, then configure the action-specific fields for each tool.
+
+### Base Connection Fields
 
 | Parameter | Description | Required |
 | --- | --- | --- |
 | hostname | SFTP server hostname or IP address. | Yes |
 | port | SFTP port (Default: 22). | Optional |
 | username | Username for authentication. | Yes |
-| password | Password for authentication. | Yes (if no private_key) |
-| private_key | Path to SSH private key. | Yes (if no password) |
+| password | Password for authentication. | Yes (alternatively with private_key) |
+| private_key | Path to SSH private key. | Yes (alternatively with password) |
 
-## Template Variables
-
+### Template Variables
 Paths and content fields support Jinja2 templates. Provide variables through the tool `args` object.
 
 ```json
@@ -37,10 +42,22 @@ Paths and content fields support Jinja2 templates. Provide variables through the
 }
 ```
 
-## Available Actions
+### How It Works
+- Select an `action` (search, list, read, write, upload, download).
+- Provide the action-specific fields such as `remote_path` or `remote_file_path`.
+- Use Jinja2 placeholders to inject runtime values where needed.
+- Validate behavior with representative payloads before enabling the tool.
 
-### Search
-Search for files that match a pattern within a directory.
+### Supported Actions
+
+#### Search
+Find files matching a pattern within a directory.
+
+**Key fields:**
+- `remote_path`: Directory to search.
+- `pattern`: Wildcard pattern (Default: `*`).
+- `recursive`: Enable subdirectory traversal.
+- `max_results`: Cap the number of returned items.
 
 ```json
 {
@@ -52,8 +69,12 @@ Search for files that match a pattern within a directory.
 }
 ```
 
-### Read
+#### Read
 Read file contents. Use `encoding` to control output format.
+
+**Key fields:**
+- `remote_file_path`: File to read.
+- `encoding`: `auto`, `text`, or `binary`.
 
 ```json
 {
@@ -63,8 +84,14 @@ Read file contents. Use `encoding` to control output format.
 }
 ```
 
-### Write
+#### Write
 Write text content to a remote file.
+
+**Key fields:**
+- `remote_file_path`: Destination file path.
+- `file_content`: Content to write.
+- `encoding`: File encoding (Default: `utf-8`).
+- `overwrite`: Overwrite existing file.
 
 ```json
 {
@@ -76,8 +103,13 @@ Write text content to a remote file.
 }
 ```
 
-### Upload
+#### Upload
 Upload a local file to the remote server.
+
+**Key fields:**
+- `local_file_path`: Source file on the MCP server host.
+- `remote_file_path`: Destination on the SFTP server.
+- `overwrite`: Overwrite existing file.
 
 ```json
 {
@@ -88,8 +120,13 @@ Upload a local file to the remote server.
 }
 ```
 
-### Download
+#### Download
 Download a remote file to the local system.
+
+**Key fields:**
+- `remote_file_path`: File to download.
+- `local_file_path`: Destination on the MCP server host.
+- `overwrite`: Overwrite existing file.
 
 ```json
 {
@@ -100,8 +137,14 @@ Download a remote file to the local system.
 }
 ```
 
-### List
+#### List
 List files and directories for a given path.
+
+**Key fields:**
+- `remote_path`: Directory to list.
+- `recursive`: List subdirectories.
+- `include_hidden`: Include dotfiles.
+- `max_results`: Cap the number of returned items.
 
 ```json
 {

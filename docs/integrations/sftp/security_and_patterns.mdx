@@ -5,29 +5,38 @@ sidebar_position: 3
 
 # Security & Implementation Patterns
 
-This section highlights security guidance and operational patterns for SFTP integrations.
+Use these controls to run SFTP-backed tools safely in production. The goal is to maintain least-privilege access, predictable filesystem scope, and bounded execution time.
+
+## Guardrails & Restricted Operations
+Restrict tools to approved base directories and prefer read-only operations where possible. Limit `write`, `upload`, and `delete`-like workflows to controlled paths.
+
+:::danger Unbounded Paths Can Expose Sensitive Data
+Unvalidated `remote_path` or `remote_file_path` values can allow access to unexpected directories. Treat all templated inputs as untrusted and enforce allowlists.
+:::
+
+Runtime note: In this integration, Jinja2 placeholders are the dynamic input mechanism. Any value injected through templates should be validated before execution.
 
 ## Authentication Hardening
 - Prefer key-based authentication over passwords for production environments.
 - Store private keys in a secure location with file permissions set to 600.
 - Use a dedicated service account with limited access to required directories only.
 
-## Path Safety
-- Avoid exposing unbounded template variables in `remote_path` or `remote_file_path`.
-- Use allowlists for base directories and validate path segments before execution.
-- Disable or constrain recursive operations when directory depth is large.
+## Data Governance & Scopes
+- Allowlist base directories and reject relative path traversal sequences.
+- Enforce distinct directories for uploads versus processed output.
+- Log operation metadata (action, path, user) for auditability.
+- Disable recursive listing when the directory depth is large or unknown.
 
-## Result and Recursion Limits
-- Keep `max_results` conservative for search and list operations to avoid oversized responses.
-- Limit recursive search depth to prevent long-running traversals.
-- Prefer targeted patterns over broad wildcards like `*`.
+## Performance Optimization
 
-## Secrets Handling
-- Do not hardcode credentials in tool definitions or prompt templates.
-- Use environment variables or secret managers for passwords and key paths.
-- Rotate credentials regularly and revoke unused keys.
+| Pattern | Description | Benefit |
+| --- | --- | --- |
+| Bounded Results | Keep `max_results` conservative for search and list operations. | Prevents oversized responses. |
+| Targeted Patterns | Use specific patterns instead of broad wildcards. | Reduces scan time. |
+| Limited Recursion | Disable or cap recursive listings. | Avoids long-running traversals. |
+| Chunked Files | Split large file reads or downloads when possible. | Keeps responses within size limits. |
 
-## Reliability Patterns
-- Validate connectivity with a test connection before enabling tools.
-- Monitor for repeated authentication failures and disable the tool if needed.
-- Use distinct directories for uploads to separate input from processed files.
+## Protocol Limitations
+- Very large files can exceed response size limits when returned as inline content.
+- Binary content may require explicit `encoding` selection for predictable output.
+- Deep recursion across large directories can exceed operational timeouts.
