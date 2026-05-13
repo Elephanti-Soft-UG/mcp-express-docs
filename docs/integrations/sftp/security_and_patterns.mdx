@@ -5,38 +5,36 @@ sidebar_position: 3
 
 # Security & Implementation Patterns
 
-Use these controls to run SFTP-backed tools safely in production. The goal is to maintain least-privilege access, predictable filesystem scope, and bounded execution time.
+This section outlines the protocols and guardrails that keep SFTP integrations secure, predictable, and compliant with enterprise governance standards.
 
 ## Guardrails & Restricted Operations
-Restrict tools to approved base directories and prefer read-only operations where possible. Limit `write`, `upload`, and `delete`-like workflows to controlled paths.
+SFTP tools can access arbitrary file paths if inputs are not constrained. Restrict operations to approved base directories and limit write-capable actions to controlled paths.
 
-:::danger Unbounded Paths Can Expose Sensitive Data
-Unvalidated `remote_path` or `remote_file_path` values can allow access to unexpected directories. Treat all templated inputs as untrusted and enforce allowlists.
+:::danger Path Scope Must Be Enforced
+Unvalidated `remote_path` or `remote_file_path` values can expose sensitive directories. Treat all Jinja2 inputs as untrusted and enforce allowlists or prefix checks.
 :::
-
-Runtime note: In this integration, Jinja2 placeholders are the dynamic input mechanism. Any value injected through templates should be validated before execution.
 
 ## Authentication Hardening
 - Prefer key-based authentication over passwords for production environments.
-- Store private keys in a secure location with file permissions set to 600.
-- Use a dedicated service account with limited access to required directories only.
+- Store private keys in a secure location with permissions set to 600.
+- Use a dedicated service account with access limited to required directories.
 
 ## Data Governance & Scopes
-- Allowlist base directories and reject relative path traversal sequences.
-- Enforce distinct directories for uploads versus processed output.
-- Log operation metadata (action, path, user) for auditability.
-- Disable recursive listing when the directory depth is large or unknown.
+- Reject relative path traversal sequences such as `../`.
+- Separate inbound upload directories from outbound download paths.
+- Audit operation metadata (action, user, path) to support traceability.
+- Disable recursive operations on unknown directory trees.
 
 ## Performance Optimization
 
 | Pattern | Description | Benefit |
 | --- | --- | --- |
 | Bounded Results | Keep `max_results` conservative for search and list operations. | Prevents oversized responses. |
-| Targeted Patterns | Use specific patterns instead of broad wildcards. | Reduces scan time. |
-| Limited Recursion | Disable or cap recursive listings. | Avoids long-running traversals. |
-| Chunked Files | Split large file reads or downloads when possible. | Keeps responses within size limits. |
+| Limited Recursion | Recursive search and list are capped in depth. | Avoids runaway traversal. |
+| Targeted Patterns | Use narrow patterns instead of broad wildcards. | Reduces scan time. |
+| File Size Controls | Avoid returning very large files inline. | Protects response latency. |
 
 ## Protocol Limitations
-- Very large files can exceed response size limits when returned as inline content.
-- Binary content may require explicit `encoding` selection for predictable output.
-- Deep recursion across large directories can exceed operational timeouts.
+- Binary content is returned as base64 when `encoding` is set to `binary` or when auto-detection fails.
+- Very large files can exceed response size limits if returned inline.
+- Deep directory traversal can exceed operational timeouts.

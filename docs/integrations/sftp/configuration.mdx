@@ -5,42 +5,13 @@ sidebar_position: 2
 
 # Configuration
 
-Configuration defines how MCP Express exposes SFTP operations as callable tools. Each tool uses a base connection plus an `action` field to select the operation at runtime.
+Configuration defines how MCP Express exposes SFTP operations as callable tools. Each tool uses a base connection (configured during Integration) plus an `action` field to select the operation at runtime.
 
 ## Tool Orchestration
 SFTP uses an action-oriented setup. A single tool can perform different operations by switching the `action` field while retaining shared connection settings.
 
 ## Configuration Setup
-Define the connection scope once, then configure the action-specific fields for each tool.
-
-### Base Connection Fields
-
-| Parameter | Description | Required |
-| --- | --- | --- |
-| hostname | SFTP server hostname or IP address. | Yes |
-| port | SFTP port (Default: 22). | Optional |
-| username | Username for authentication. | Yes |
-| password | Password for authentication. | Yes (alternatively with private_key) |
-| private_key | Path to SSH private key. | Yes (alternatively with password) |
-
-### Template Variables
-Paths and content fields support Jinja2 templates. Provide variables through the tool `args` object.
-
-```json
-{
-  "config": {
-    "action": "read",
-    "hostname": "sftp.example.com",
-    "username": "user",
-    "password": "password",
-    "remote_file_path": "/data/{{ year }}/{{ month }}/report.csv"
-  },
-  "args": {
-    "year": "2024",
-    "month": "01"
-  }
-}
-```
+Define the action and action-specific fields for each tool. All paths and content fields support Jinja2 templates (for example, `/data/{{ year }}/{{ month }}/report.csv`).
 
 ### How It Works
 - Select an `action` (search, list, read, write, upload, download).
@@ -51,107 +22,65 @@ Paths and content fields support Jinja2 templates. Provide variables through the
 ### Supported Actions
 
 #### Search
-Find files matching a pattern within a directory.
+Searches for files matching a wildcard pattern within a directory.
 
-**Key fields:**
-- `remote_path`: Directory to search.
-- `pattern`: Wildcard pattern (Default: `*`).
-- `recursive`: Enable subdirectory traversal.
-- `max_results`: Cap the number of returned items.
-
-```json
-{
-  "action": "search",
-  "remote_path": "/uploads",
-  "pattern": "*.log",
-  "recursive": true,
-  "max_results": 100
-}
-```
+| Field | Description | Default |
+| --- | --- | --- |
+| remote_path | Directory to search. | Required |
+| pattern | Wildcard pattern (e.g., `*.log`). | `*` |
+| recursive | Traverse subdirectories. | `true` |
+| max_results | Cap the number of matched items. | `100` |
 
 #### Read
-Read file contents. Use `encoding` to control output format.
+Reads file contents from the remote server.
 
-**Key fields:**
-- `remote_file_path`: File to read.
-- `encoding`: `auto`, `text`, or `binary`.
-
-```json
-{
-  "action": "read",
-  "remote_file_path": "/data/config.json",
-  "encoding": "auto"
-}
-```
+| Field | Description | Default |
+| --- | --- | --- |
+| remote_file_path | File to read. | Required |
+| encoding | `auto`, `text`, or `binary`. | `auto` |
 
 #### Write
-Write text content to a remote file.
+Writes content to a remote file.
 
-**Key fields:**
-- `remote_file_path`: Destination file path.
-- `file_content`: Content to write.
-- `encoding`: File encoding (Default: `utf-8`).
-- `overwrite`: Overwrite existing file.
-
-```json
-{
-  "action": "write",
-  "remote_file_path": "/data/output.txt",
-  "file_content": "Content to write",
-  "encoding": "utf-8",
-  "overwrite": true
-}
-```
+| Field | Description | Default |
+| --- | --- | --- |
+| remote_file_path | Destination file path. | Required |
+| file_content | Content to write (supports templates). | Empty string |
+| encoding | Output encoding. | `utf-8` |
+| overwrite | Overwrite if file exists. | `true` |
 
 #### Upload
-Upload a local file to the remote server.
+Uploads a local file from the MCP server host to the SFTP server.
 
-**Key fields:**
-- `local_file_path`: Source file on the MCP server host.
-- `remote_file_path`: Destination on the SFTP server.
-- `overwrite`: Overwrite existing file.
-
-```json
-{
-  "action": "upload",
-  "local_file_path": "/home/user/document.pdf",
-  "remote_file_path": "/uploads/document.pdf",
-  "overwrite": false
-}
-```
+| Field | Description | Default |
+| --- | --- | --- |
+| local_file_path | Source file path on the MCP server host. | Required |
+| remote_file_path | Destination path on the SFTP server. | Required |
+| overwrite | Overwrite if file exists. | `true` |
 
 #### Download
-Download a remote file to the local system.
+Downloads a remote file to the MCP server host.
 
-**Key fields:**
-- `remote_file_path`: File to download.
-- `local_file_path`: Destination on the MCP server host.
-- `overwrite`: Overwrite existing file.
-
-```json
-{
-  "action": "download",
-  "remote_file_path": "/backups/data.tar.gz",
-  "local_file_path": "/home/user/downloads/data.tar.gz",
-  "overwrite": true
-}
-```
+| Field | Description | Default |
+| --- | --- | --- |
+| remote_file_path | File to download. | Required |
+| local_file_path | Destination path on the MCP server host. | Required |
+| overwrite | Overwrite if file exists. | `true` |
 
 #### List
-List files and directories for a given path.
+Lists files and directories in a remote path.
 
-**Key fields:**
-- `remote_path`: Directory to list.
-- `recursive`: List subdirectories.
-- `include_hidden`: Include dotfiles.
-- `max_results`: Cap the number of returned items.
+| Field | Description | Default |
+| --- | --- | --- |
+| remote_path | Directory to list. | `/` |
+| recursive | Traverse subdirectories. | `false` |
+| include_hidden | Include dotfiles. | `false` |
+| max_results | Cap the number of returned items. | `1000` |
 
-```json
-{
-  "action": "list",
-  "remote_path": "/data",
-  "recursive": false,
-  "include_hidden": false,
-  "max_results": 1000
-}
-```
+:::tip Response Shape
+Search and list results return metadata such as `size`, `modified` timestamp, and `permissions` for each item.
+:::
+
+:::warning Recursion Depth Limit
+Recursive search and list operations are capped at a depth of 10 levels to prevent excessive traversal.
+:::
