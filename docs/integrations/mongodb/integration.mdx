@@ -1,0 +1,34 @@
+---
+sidebar_label: Integration
+sidebar_position: 1
+---
+
+# MongoDB Integration
+
+To interface MCP Express with a MongoDB cluster, define the connection parameters and validate access. The handshake verifies credentials and provides collection metadata needed for tool creation.
+
+## Connection Parameters
+
+Configure the following fields using a dedicated database user with the minimum permissions required.
+
+| Parameter | Technical Description | Required |
+|---|---|---|
+| Host | MongoDB host or cluster endpoint. | Yes |
+| Port | MongoDB port (Default: 27017). | Optional |
+| Database Name | Database scope for the integration. | Yes |
+| Username | Auth user for the database. | Optional |
+| Password | Password for the database user. | Optional |
+
+:::warning Required Permissions
+Ensure the database user has permissions for the collections and actions you plan to expose as tools.
+:::
+
+## Handshake & Collection Discovery
+
+When you click Next, MCP Express validates the connection and prepares integration metadata:
+
+- **Connection Test**: Verifies host, port, and credentials.
+- **Database Stats**: Confirms the target database is reachable.
+- **Collection Discovery**: Enumerates collections to power configuration workflows.
+
+If validation fails, MCP Express returns a detailed error to help troubleshoot the connection.

@@ -1,0 +1,42 @@
+---
+sidebar_label: Security and Patterns
+sidebar_position: 3
+---
+
+# Security & Implementation Patterns
+
+This section outlines protocols and guardrails that help keep MongoDB integrations secure, reliable, and aligned with data governance requirements.
+
+## Least-Privilege Database Roles
+
+Create dedicated database users for MCP Express and scope permissions to the minimum required:
+- Read-only users for `find` and `count` tools.
+- Write users scoped to specific collections for insert or update workflows.
+- Avoid admin or wildcard roles for production integrations.
+
+## Filter and Update Safety
+
+Templated inputs (`{{ }}`) enable runtime flexibility but should be constrained:
+- Use allowlists or input validation to avoid unrestricted filters.
+- Prefer exact-key filters (for example, `_id`) for mutation tools.
+- Require `$set`-only updates where possible to prevent accidental document replacement.
+
+## Controlled Deletion Patterns
+
+Delete operations are high-risk and should be used sparingly:
+- Restrict `delete_one` and `delete_many` to service accounts with narrow scope.
+- Require explicit filters and avoid unbounded deletes.
+
+## Performance Optimization
+
+To ensure responses stay within JSON-RPC timeouts:
+| Pattern | Description | Benefit |
+|---|---|---|
+| Indexed Filters | Index fields used in `filter_query`. | Reduces query latency. |
+| Limit Clauses | Use `limit` on `find` tools. | Prevents large result sets. |
+| Narrow Projections | Return only needed fields. | Reduces payload size. |
+
+## Protocol Limitations
+
+- **Large Binary Fields**: Avoid returning large binary values (for example, file blobs) in `find` results.
+- **Long-Running Queries**: Unbounded filters may exceed timeout limits and will be terminated.
