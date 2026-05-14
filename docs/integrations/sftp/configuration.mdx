@@ -22,7 +22,7 @@ Define the action and action-specific fields for each tool. All paths and conten
 ### Supported Actions
 
 #### Search
-Searches for files matching a wildcard pattern within a directory.
+Finds files that match a wildcard pattern under a target directory. Use this to discover batch outputs, audit logs, or time-partitioned files before triggering reads or downloads.
 
 | Field | Description | Default |
 | --- | --- | --- |
@@ -32,7 +32,7 @@ Searches for files matching a wildcard pattern within a directory.
 | max_results | Cap the number of matched items. | `100` |
 
 #### Read
-Reads file contents from the remote server.
+Retrieves the contents of a single remote file so the model can parse, summarize, or validate the payload.
 
 | Field | Description | Default |
 | --- | --- | --- |
@@ -40,7 +40,7 @@ Reads file contents from the remote server.
 | encoding | `auto`, `text`, or `binary`. | `auto` |
 
 #### Write
-Writes content to a remote file.
+Creates or updates a remote file by sending content from the MCP server. Use this for report generation, exporting model outputs, or appending structured results to a shared location.
 
 | Field | Description | Default |
 | --- | --- | --- |
@@ -50,7 +50,7 @@ Writes content to a remote file.
 | overwrite | Overwrite if file exists. | `true` |
 
 #### Upload
-Uploads a local file from the MCP server host to the SFTP server.
+Transfers a local file from the MCP server host to the SFTP server. Use this when a prior step generates a file that must be delivered to a partner system.
 
 | Field | Description | Default |
 | --- | --- | --- |
@@ -59,7 +59,7 @@ Uploads a local file from the MCP server host to the SFTP server.
 | overwrite | Overwrite if file exists. | `true` |
 
 #### Download
-Downloads a remote file to the MCP server host.
+Fetches a remote file onto the MCP server host for downstream processing, validation, or ingestion.
 
 | Field | Description | Default |
 | --- | --- | --- |
@@ -68,7 +68,7 @@ Downloads a remote file to the MCP server host.
 | overwrite | Overwrite if file exists. | `true` |
 
 #### List
-Lists files and directories in a remote path.
+Enumerates files and directories under a remote path, optionally traversing subdirectories for inventory and housekeeping workflows.
 
 | Field | Description | Default |
 | --- | --- | --- |
