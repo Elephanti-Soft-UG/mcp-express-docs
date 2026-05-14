@@ -5,36 +5,65 @@ sidebar_position: 3
 
 # Security & Implementation Patterns
 
-This section outlines the protocols and guardrails that keep SFTP integrations secure, predictable, and compliant with enterprise governance standards.
+This section outlines the guardrails and usage patterns that are specific to the SFTP connector. The main risks here are broad path scope, overly permissive wildcard matching, oversized directory scans, and unsafe use of templated paths or content.
 
-## Guardrails & Restricted Operations
-SFTP tools can access arbitrary file paths if inputs are not constrained. Restrict operations to approved base directories and limit write-capable actions to controlled paths.
+## Guardrails & Path Scope
+The connector accepts templated values for `remote_path`, `remote_file_path`, `local_file_path`, and `file_content`, so every runtime value should be treated as untrusted input until it is validated by your tool configuration.
+
+Keep operations inside approved source and destination roots. That matters most for:
+- `search` and `list`, which walk directory trees from a starting path.
+- `read`, which pulls a single remote file into the model context.
+- `write`, `upload`, and `download`, which can create or replace files when `overwrite` is enabled.
 
 :::danger Path Scope Must Be Enforced
-Unvalidated `remote_path` or `remote_file_path` values can expose sensitive directories. Treat all Jinja2 inputs as untrusted and enforce allowlists or prefix checks.
+Unvalidated path templates can point the connector at unintended directories or files. Enforce allowlists, root-prefix checks, and input validation before allowing runtime substitution.
 :::
 
-## Authentication Hardening
-- Prefer key-based authentication over passwords for production environments.
-- Store private keys in a secure location with permissions set to 600.
-- Use a dedicated service account with access limited to required directories.
+## SFTP Pattern Semantics
+The connector's search action uses filename pattern matching, not full-path regexes. The `pattern` field is evaluated with wildcard matching against each entry name under the chosen directory.
 
-## Data Governance & Scopes
-- Reject relative path traversal sequences such as `../`.
-- Separate inbound upload directories from outbound download paths.
-- Audit operation metadata (action, user, path) to support traceability.
-- Disable recursive operations on unknown directory trees.
+Common examples:
+- `*.log` matches every file ending in `.log` in the current directory tree.
+- `report-*.csv` matches files such as `report-daily.csv` or `report-2026-05.csv`.
+- `*` matches every file name, which is useful for discovery but should be avoided in production unless the directory is tightly scoped.
+
+Because the pattern is matched against the file name, not the full remote path, use a narrow `remote_path` when you need precise targeting and a narrow `pattern` when you need predictable results.
+
+## Action-Specific Safety
+
+### Search and List
+Search and list are the main discovery operations, so they should be bounded carefully.
+- Use `max_results` to keep result sets small and predictable.
+- Keep patterns narrow so you do not scan unnecessary files.
+- Disable recursion unless the directory tree is known and stable.
+- Avoid listing hidden files unless your workflow explicitly needs them.
+- Recursive traversal is capped in the connector to prevent runaway scans.
+
+### Read
+Read is the simplest retrieval path, but it still needs content controls.
+- Prefer `encoding: auto` for mixed text files.
+- Use `encoding: text` when you know the file is textual.
+- Use `encoding: binary` when the file is not text and you want base64 output instead of a decode failure.
+
+### Write, Upload, and Download
+These actions are where overwrites and destination selection matter most.
+- Keep destination paths explicit and avoid broad templated targets.
+- Leave `overwrite` disabled when you need immutable delivery semantics.
+- Use templates only for the variable part of a path, not the entire destination root.
+- Separate generation, staging, and final delivery paths so accidental replacement is easier to detect.
 
 ## Performance Optimization
 
 | Pattern | Description | Benefit |
 | --- | --- | --- |
-| Bounded Results | Keep `max_results` conservative for search and list operations. | Prevents oversized responses. |
-| Limited Recursion | Recursive search and list are capped in depth. | Avoids runaway traversal. |
-| Targeted Patterns | Use narrow patterns instead of broad wildcards. | Reduces scan time. |
-| File Size Controls | Avoid returning very large files inline. | Protects response latency. |
+| Bounded Results | Keep `max_results` conservative for `search` and `list`. | Prevents oversized responses. |
+| Targeted Wildcards | Prefer patterns like `*.log` or `report-*.csv` over `*`. | Reduces unnecessary file matches. |
+| Limited Recursion | Only enable recursion when the directory tree is known. | Avoids runaway traversal and slow scans. |
+| Narrow Encodings | Use the right encoding mode for each file type. | Prevents decode errors and unnecessary base64 output. |
+| Explicit Destinations | Keep write/upload/download targets precise. | Reduces accidental overwrites and delivery mistakes. |
 
 ## Protocol Limitations
+- Search patterns are matched against file names, so they are not a substitute for path allowlists.
 - Binary content is returned as base64 when `encoding` is set to `binary` or when auto-detection fails.
 - Very large files can exceed response size limits if returned inline.
-- Deep directory traversal can exceed operational timeouts.
+- Recursive directory traversal is intentionally capped to avoid runaway scans.
