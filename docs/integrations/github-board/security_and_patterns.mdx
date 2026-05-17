@@ -1,0 +1,51 @@
+---
+sidebar_label: Security and Patterns
+sidebar_position: 3
+---
+
+# Security & Implementation Patterns
+
+Use these controls to run GitHub Board-backed MCP tools safely in production. The primary goals are to keep board access scoped, minimize PAT exposure, and prevent the model from performing unintended project mutations.
+
+## Guardrails & Restricted Operations
+
+Restrict each tool to approved owners, project numbers, repositories, and action types. Avoid exposing broad project discovery or unrestricted write access when the use case only needs focused board operations.
+
+:::danger Dynamic Execution Risk
+Allowing unconstrained runtime selection of operations, such as delete item, create item or create project can lead to unintended data mutation. Enforce allowlists for operations or simply don't enable these tool in mcp-express if you don't intend to use them.
+:::
+
+## Fully Dynamic AI Operations
+
+Dynamic board workflows can let the model choose projects, items, repositories, or create content at runtime. This improves flexibility but increases the risk of unintended issue linking, noisy project updates, or access beyond the intended operational boundary.
+
+Scope distinction:
+
+- **Templated Runtime Values**: A fixed project workflow accepts bounded inputs such as `title`, `body`, or `first`.
+- **Fully Dynamic Operations**: The model can decide which project, repository, or item operation to execute at runtime.
+
+:::warning Avoid Unconstrained Write Operation in Production
+Only enable dynamic create or update paths when owner scope, project allowlists, repository boundaries are all enforced.
+:::
+
+## Data Governance & Scopes
+
+- Use a classic PAT with only the `project` permission enabled, scoped to the required account or organization.
+- Separate read-only board tools from write-capable item or issue workflows to keep audits and approvals clear.
+- Constrain `first` to operationally safe values and validate project or item identifiers before execution.
+
+## Performance Optimization
+
+| Pattern             | Description                                                      | Benefit                                                    |
+| ------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------- |
+| Fixed Owner Context | Keep `owner` and `owner_type` constant per integration instance. | Reduces API ambiguity and simplifies authorization checks. |
+| Bounded Pagination  | Limit `first` to the smallest useful item count.                 | Improves latency and avoids oversized result payloads.     |
+
+## Protocol Limitations
+
+- GitHub Board integration behavior depends on the permissions granted to the PAT.
+- Organization-owned project access may fail unless the PAT owner is a collaborator in the organization.
+
+## References
+
+- [GitHub PAT Documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
