@@ -1,0 +1,45 @@
+---
+sidebar_label: Integration
+sidebar_position: 1
+---
+
+# GitHub Board Integration
+
+To connect MCP Express to GitHub Board, configure authentication and project ownership scope before enabling board management tools. This integration provides secure access to view, create, and manage GitHub project boards and items for a user or organization, using a Personal Access Token (PAT) for authentication.
+
+Once connected, you can automate project workflows, manage issues and draft items, and keep board operations scoped to the configured owner context.
+
+## Connection Parameters
+
+| Parameter    | Technical Description                                                                                                                                          | Required |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| github_token | GitHub Personal Access Token used to authenticate github board request. **This integration requires a classic token (fine-grained tokens are not supported).** | Yes      |
+| owner        | For `owner_type` `user`, this is your GitHub username. For `owner_type` `organization`, this is the organization name.                                         | Yes      |
+| owner_type   | Project owner classification. Accepted values are `user` or `organization`.                                                                                    | Yes      |
+
+:::info
+**Classic Token Required:**
+You must create a new Personal Access Token of type **Tokens (classic)** with the `project` permission enabled. Fine-grained tokens are not supported for this integration.
+:::
+
+:::tip
+**Best Practice:**
+Use a dedicated classic token for this integration only. Do not reuse old tokens or grant more permissions than necessary—enable only the `project` permission.
+:::
+
+## Handshake & Capability Discovery
+
+- **Token Validation**: MCP Express verifies that the supplied PAT can authenticate with GitHub Board.
+- **Owner Scope Resolution**: The integration resolves the configured `owner` and `owner_type` to the correct user or organization project context.
+- **Tool Schema Preparation**: Initializes request/response mappings used by generated MCP tools for LLM execution.
+
+## Generate a GitHub Personal Access Token
+
+Create a PAT before configuring the integration:
+
+1. Open the GitHub PAT guide: [Creating a personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token).
+2. Go to [GitHub token settings](https://github.com/settings/tokens) and choose **Generate new token**.
+3. Select **Tokens (classic)**.
+4. Enable the `project`.
+5. Set an expiration window to your liking, such as 30 to 90 days.
+6. Use this token for `Github Token` field in your mcp-express tool.
