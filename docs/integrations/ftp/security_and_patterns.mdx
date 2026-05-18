@@ -5,10 +5,10 @@ sidebar_position: 3
 
 # Security & Implementation Patterns
 
-This section outlines the guardrails and usage patterns that are specific to the FTP connector. The main risks here are broad path scope, overly permissive wildcard matching, oversized directory scans, and unsafe use of templated paths or content.
+This section outlines the guardrails and usage patterns that keep FTP tools safe for production. The main risks are broad path scope, overly permissive wildcard matching, oversized directory scans, and unsafe use of placeholders in paths or content.
 
 ## Guardrails & Path Scope
-The connector accepts templated values for `remote_path`, `remote_file_path`, `local_file_path`, and `file_content`, so every runtime value should be treated as untrusted input until it is validated by your tool configuration.
+The tool accepts Remote Path, Remote File Path, Local Path, and File Content. Treat any user-provided value as untrusted until your tool configuration validates it.
 
 Keep operations inside approved source and destination roots. That matters most for:
 - `search` and `list`, which walk directory trees from a starting path.
@@ -33,33 +33,50 @@ Because the pattern is matched against the file name, not the full remote path, 
 
 ### Search and List
 Search and list are the main discovery operations, so they should be bounded carefully.
-- Use `max_results` to keep result sets small and predictable.
+- Use Max Results to keep result sets small and predictable.
 - Keep patterns narrow so you do not scan unnecessary files.
 - Disable recursion unless the directory tree is known and stable.
 - Avoid listing hidden files unless your workflow explicitly needs them.
-- Recursive traversal is capped in the connector to prevent runaway scans.
+- Recursive traversal is capped to prevent runaway scans.
 
 ### Read
 Read is the simplest retrieval path, but it still needs content controls.
-- Prefer `encoding: auto` for mixed text files.
-- Use `encoding: text` when you know the file is textual.
-- Use `encoding: binary` when the file is not text and you want base64 output instead of a decode failure.
+- Prefer Encoding set to auto for mixed text files.
+- Use Encoding set to text when you know the file is textual.
+- Use Encoding set to binary when the file is not text and you want encoded output instead of a decode failure.
 
 ### Write, Upload, and Download
 These actions are where overwrites and destination selection matter most.
-- Keep destination paths explicit and avoid broad templated targets.
-- Use templates only for the variable part of a path, not the entire destination root.
-- For FTP, overwrite checks are only enforced on downloads. Writes and uploads overwrite server files if the FTP server allows it.
+- Keep destination paths explicit and avoid broad placeholders.
+- Use placeholders only for the variable part of a path, not the entire destination root.
+- FTP servers commonly replace files on write or upload. Use Overwrite only when replacement is safe.
 - Separate generation, staging, and final delivery paths so accidental replacement is easier to detect.
+
+## FTP Pattern Semantics
+Use filename wildcards only. The following pattern types are supported.
+
+**Supported patterns**
+- `*.log`
+- `report-*.csv`
+- `invoices-2026-??.pdf`
+- `*`
+
+**Not supported**
+- `^report-.*\.csv$` (regex)
+- `**/*.log` (globstar)
+- `logs/(error|warn)-*.txt` (regex group)
+- `data/2026/[01-12]/report.csv` (regex-style range)
+
+Prefer patterns like `*.log` or `report-*.csv` over `*`. Use a narrow Remote Path when you need precise targeting.
 
 ## Performance Optimization
 
 | Pattern | Description | Benefit |
 | --- | --- | --- |
-| Bounded Results | Keep `max_results` conservative for `search` and `list`. | Prevents oversized responses. |
-| Targeted Wildcards | Prefer patterns like `*.log` or `report-*.csv` over `*`. | Reduces unnecessary file matches. |
+| Bounded Results | Keep Max Results conservative for Search and List. | Prevents oversized responses. |
+| Targeted Patterns | Prefer patterns like `*.log` or `report-*.csv` over `*`. | Reduces unnecessary file matches. |
 | Limited Recursion | Only enable recursion when the directory tree is known. | Avoids runaway traversal and slow scans. |
-| Narrow Encodings | Use the right encoding mode for each file type. | Prevents decode errors and unnecessary base64 output. |
+| Encoding Choices | Use the right encoding mode for each file type. | Prevents decode errors and unnecessary encoded output. |
 | Explicit Destinations | Keep write/upload/download targets precise. | Reduces accidental overwrites and delivery mistakes. |
 
 ## Protocol Limitations
