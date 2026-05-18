@@ -1,0 +1,8 @@
+{
+  "label": "FTP",
+  "position": 9,
+  "link": {
+    "type": "doc",
+    "id": "integrations/ftp/index"
+  }
+}

@@ -1,0 +1,32 @@
+---
+sidebar_label: Integration
+sidebar_position: 1
+---
+
+# FTP Integration
+
+Configure FTP connectivity so MCP Express can establish a session, validate credentials, and prepare file operations. This sets the trust boundary for read and write access on your remote server.
+
+## Connection Parameters
+
+Configure the following fields to authorize the MCP server. Use a dedicated service account with minimal privileges to maintain strict data governance.
+
+| Parameter | Technical Description | Required |
+| --- | --- | --- |
+| Hostname | FTP server hostname or IP address. Accepts `hostname` or `host`. | Yes |
+| Port | FTP port (Default: 21). | Optional |
+| Username | Account used to authenticate to the server. | Yes |
+| Password | Password-based authentication. | Yes |
+
+:::tip Network Access
+Ensure the MCP server can reach the FTP host on the configured port and that firewalls allow inbound access.
+:::
+
+## Connection Validation
+
+When you test the connection, MCP Express performs the following checks:
+- **Credential Verification**: Confirms the username and password.
+- **Session Validation**: Verifies the FTP handshake and login.
+- **Working Directory Probe**: Retrieves the current directory and welcome banner to confirm access.
+
+If validation fails, the test output includes the error type and message to help you resolve connectivity or permission issues.

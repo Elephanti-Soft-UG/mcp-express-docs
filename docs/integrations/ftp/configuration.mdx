@@ -1,0 +1,86 @@
+---
+sidebar_label: Configuration
+sidebar_position: 2
+---
+
+# Configuration
+
+Configuration defines how MCP Express exposes FTP operations as callable tools. Each tool uses a base connection (configured during Integration) plus an `action` field to select the operation at runtime.
+
+## Tool Orchestration
+FTP uses an action-oriented setup. A single tool can perform different operations by switching the `action` field while retaining shared connection settings.
+
+## Configuration Setup
+Define the action and action-specific fields for each tool. All paths and content fields support Jinja2 templates (for example, `/data/{{ year }}/{{ month }}/report.csv`).
+
+### How It Works
+- Select an `action` (search, list, read, write, upload, download).
+- Provide the action-specific fields such as `remote_path` or `remote_file_path`.
+- Use Jinja2 placeholders to inject runtime values where needed.
+- Validate behavior with representative payloads before enabling the tool.
+
+### Supported Actions
+
+#### Search
+Finds files that match a wildcard pattern under a target directory. Use this to discover batch outputs, audit logs, or time-partitioned files before triggering reads or downloads.
+
+| Field | Description | Default |
+| --- | --- | --- |
+| remote_path | Directory to search. | Required |
+| pattern | Wildcard pattern (e.g., `*.log`). | `*` |
+| recursive | Traverse subdirectories. | `true` |
+| max_results | Cap the number of matched items. | `100` |
+
+#### Read
+Retrieves the contents of a single remote file so the model can parse, summarize, or validate the payload.
+
+| Field | Description | Default |
+| --- | --- | --- |
+| remote_file_path | File to read. | Required |
+| encoding | `auto`, `text`, or `binary`. | `auto` |
+
+#### Write
+Creates or updates a remote file by sending content from the MCP server. Use this for report generation, exporting model outputs, or appending structured results to a shared location.
+
+| Field | Description | Default |
+| --- | --- | --- |
+| remote_file_path | Destination file path. | Required |
+| file_content | Content to write (supports templates). | Empty string |
+| encoding | Output encoding. | `utf-8` |
+| overwrite | Overwrite if file exists. | `true` |
+
+#### Upload
+Transfers a local file from the MCP server host to the FTP server. Use this when a prior step generates a file that must be delivered to a partner system.
+
+| Field | Description | Default |
+| --- | --- | --- |
+| local_file_path | Source file path on the MCP server host. | Required |
+| remote_file_path | Destination path on the FTP server. | Required |
+| overwrite | Overwrite if file exists. | `true` |
+
+#### Download
+Fetches a remote file onto the MCP server host for downstream processing, validation, or ingestion.
+
+| Field | Description | Default |
+| --- | --- | --- |
+| remote_file_path | File to download. | Required |
+| local_file_path | Destination path on the MCP server host. | Required |
+| overwrite | Overwrite if file exists. | `true` |
+
+#### List
+Enumerates files and directories under a remote path, optionally traversing subdirectories for inventory and housekeeping workflows.
+
+| Field | Description | Default |
+| --- | --- | --- |
+| remote_path | Directory to list. | `/` |
+| recursive | Traverse subdirectories. | `false` |
+| include_hidden | Include dotfiles. | `false` |
+| max_results | Cap the number of returned items. | `1000` |
+
+:::tip Response Shape
+Search and list results return metadata such as `size`, `is_dir`, and `permissions` for each item.
+:::
+
+:::warning Recursion Depth Limit
+Recursive search and list operations are capped at a depth of 10 levels to prevent excessive traversal.
+:::
