@@ -30,16 +30,16 @@ Only enable dynamic create or update paths when owner scope, project allowlists,
 
 ## Data Governance & Scopes
 
-- Use a classic PAT with only the `project` permission enabled, scoped to the required account or organization.
+- Use a classic PAT with only the `project` scope enabled.
 - Separate read-only board tools from write-capable item or issue workflows to keep audits and approvals clear.
 - Constrain `first` to operationally safe values and validate project or item identifiers before execution.
 
 ## Performance Optimization
 
-| Pattern             | Description                                                      | Benefit                                                    |
-| ------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------- |
-| Fixed Owner Context | Keep `owner` and `owner_type` constant per integration instance. | Reduces API ambiguity and simplifies authorization checks. |
-| Bounded Pagination  | Limit `first` to the smallest useful item count.                 | Improves latency and avoids oversized result payloads.     |
+- **Fixed Owner Context**: Keep `Owner` and `Owner type` constant per integration instance.  
+  _Benefit: Reduces API ambiguity and simplifies authorization checks._
+- **Bounded Pagination**: Limit `first` to the smallest useful item count.  
+  _Benefit: Improves latency and avoids oversized result payloads._
 
 ## Protocol Limitations
 
@@ -48,4 +48,4 @@ Only enable dynamic create or update paths when owner scope, project allowlists,
 
 ## References
 
-- [GitHub PAT Documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+- [GitHub PAT Documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#personal-access-tokens-classic)
