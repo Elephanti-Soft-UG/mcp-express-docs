@@ -8,7 +8,7 @@ sidebar_position: 3
 This section outlines the guardrails and usage patterns that keep SFTP tools safe for production. The main risks are broad path scope, overly permissive wildcard matching, oversized directory scans, and unsafe use of templated paths or content.
 
 ## Guardrails & Path Scope
-The tool accepts Remote Path, Remote File Path, Local Path, and File Content.
+The tool accepts Remote Path, Local Path, and File Content.
 
 Only use the folders you are allowed to access. That matters most for:
 - Search and List, which walk directory trees from a starting path.
@@ -16,7 +16,7 @@ Only use the folders you are allowed to access. That matters most for:
 - Write, Upload, and Download, which can create or replace files when overwrite is enabled.
 
 :::danger Path Scope Must Be Enforced
-Unvalidated path templates can point the tool at unintended directories or files. Enforce allowlists, root-prefix checks, and input validation before allowing runtime substitution.
+Unvalidated runtime path can point the tool at unintended directories or files. Enforce allowlists, root-prefix checks, and input validation before allowing runtime substitution.
 :::
 
 ## SFTP Pattern Semantics
