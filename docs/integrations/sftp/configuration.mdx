@@ -5,82 +5,46 @@ sidebar_position: 2
 
 # Configuration
 
-Configuration defines how MCP Express exposes SFTP operations as callable tools. Each tool uses a base connection (configured during Integration) plus an `action` field to select the operation at runtime.
+Once the SFTP connection is validated, configuration defines how MCP Express exposes SFTP file operations as callable tools. Most actions require a remote path and may optionally include filters, file content, or local destinations depending on the tool.
 
 ## Tool Orchestration
-SFTP uses an action-oriented setup. A single tool can perform different operations by switching the `action` field while retaining shared connection settings.
+SFTP uses an action-oriented model where each tool maps to a bounded file operation. Configuration should keep path scope explicit and expose only the runtime fields needed by that action.
 
-## Configuration Setup
-Define the action and action-specific fields for each tool. All paths and content fields support Jinja2 templates (for example, `/data/{{ year }}/{{ month }}/report.csv`).
-
-### How It Works
-- Select an `action` (search, list, read, write, upload, download).
-- Provide the action-specific fields such as `remote_path` or `remote_file_path`.
-- Use Jinja2 placeholders to inject runtime values where needed.
-- Validate behavior with representative payloads before enabling the tool.
+## Action Configuration
+Use action configuration to define which file operation the tool performs and which parameters are resolved at runtime. Paths and content fields support Jinja2 templates (for example, `/data/{{ year }}/{{ month }}/report.csv`, which inserts the provided `year` and `month` values into the path at runtime).
 
 ### Supported Actions
 
-#### Search
-Finds files that match a wildcard pattern under a target directory. Use this to discover batch outputs, audit logs, or time-partitioned files before triggering reads or downloads.
+The following actions are supported by the SFTP integration:
 
-| Field | Description | Default |
+- **Search**: Find files that match a wildcard pattern under a directory.
+- **Read**: Read the contents of a specific remote file.
+- **Write**: Create or update a remote file with provided content.
+- **Upload**: Send a local file to the remote server.
+- **Download**: Fetch a remote file to the MCP server host.
+- **List**: List files and directories under a remote path.
+
+## Common Runtime Parameters
+
+Use the following parameters according to the configured action.
+
+| Parameter | Required | Description |
 | --- | --- | --- |
-| remote_path | Directory to search. | Required |
-| pattern | Wildcard pattern (e.g., `*.log`). | `*` |
-| recursive | Traverse subdirectories. | `true` |
-| max_results | Cap the number of matched items. | `100` |
+| Action | Yes | The operation to run: `search`, `list`, `read`, `write`, `upload`, or `download`. |
+| Remote Path | Some | Directory to search or list. Required for `search` and `list`. |
+| Remote Path (File) | Some | Remote file path for `read`, `write`, `upload`, or `download`. |
+| Local Path | Some | Local file path for `upload` and `download` (on the MCP server host). |
+| File Content | Some | Content to write for `write`. |
+| Pattern | No | Wildcard match for `search` (e.g., `*.log`). |
+| Recursive | No | Enable subdirectory traversal for `search` or `list`. |
+| Include Hidden | No | Include dotfiles when listing. |
+| Max Results | No | Cap the number of returned items. Defaults: `search` 100, `list` 1000. |
+| Encoding | No | Read mode for `read`: `auto`, `text`, or `binary`. |
+| Overwrite | No | Overwrite existing files for `write`, `upload`, or `download`. |
 
-#### Read
-Retrieves the contents of a single remote file so the model can parse, summarize, or validate the payload.
+### Governance Controls
+Limit tools to approved base directories and avoid broad patterns in production. Keep write, upload, and download targets explicit so content is only placed where you expect it.
 
-| Field | Description | Default |
-| --- | --- | --- |
-| remote_file_path | File to read. | Required |
-| encoding | `auto`, `text`, or `binary`. | `auto` |
-
-#### Write
-Creates or updates a remote file by sending content from the MCP server. Use this for report generation, exporting model outputs, or appending structured results to a shared location.
-
-| Field | Description | Default |
-| --- | --- | --- |
-| remote_file_path | Destination file path. | Required |
-| file_content | Content to write (supports templates). | Empty string |
-| encoding | Output encoding. | `utf-8` |
-| overwrite | Overwrite if file exists. | `true` |
-
-#### Upload
-Transfers a local file from the MCP server host to the SFTP server. Use this when a prior step generates a file that must be delivered to a partner system.
-
-| Field | Description | Default |
-| --- | --- | --- |
-| local_file_path | Source file path on the MCP server host. | Required |
-| remote_file_path | Destination path on the SFTP server. | Required |
-| overwrite | Overwrite if file exists. | `true` |
-
-#### Download
-Fetches a remote file onto the MCP server host for downstream processing, validation, or ingestion.
-
-| Field | Description | Default |
-| --- | --- | --- |
-| remote_file_path | File to download. | Required |
-| local_file_path | Destination path on the MCP server host. | Required |
-| overwrite | Overwrite if file exists. | `true` |
-
-#### List
-Enumerates files and directories under a remote path, optionally traversing subdirectories for inventory and housekeeping workflows.
-
-| Field | Description | Default |
-| --- | --- | --- |
-| remote_path | Directory to list. | `/` |
-| recursive | Traverse subdirectories. | `false` |
-| include_hidden | Include dotfiles. | `false` |
-| max_results | Cap the number of returned items. | `1000` |
-
-:::tip Response Shape
-Search and list results return metadata such as `size`, `modified` timestamp, and `permissions` for each item.
-:::
-
-:::warning Recursion Depth Limit
-Recursive search and list operations are capped at a depth of 10 levels to prevent excessive traversal.
+:::tip Test Tool Contracts Before Deployment
+Use the built-in testing utility to verify path resolution (`{{ }}` substitution), required field behavior, and permissions before enabling tools in production.
 :::
