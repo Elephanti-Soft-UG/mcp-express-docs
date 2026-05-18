@@ -11,7 +11,7 @@ Once the SFTP connection is validated, configuration defines how MCP Express exp
 SFTP uses an action-oriented model where each tool maps to a bounded file operation. Configuration should keep path scope explicit and expose only the runtime fields needed by that action.
 
 ## Action Configuration
-Use action configuration to define which file operation the tool performs and which parameters are resolved at runtime. Paths and content fields support Jinja2 templates (for example, `/data/{{ year }}/{{ month }}/report.csv`, which inserts the provided `year` and `month` values into the path at runtime).
+Use action configuration to define which file operation the tool performs and which parameters are resolved at runtime.
 
 ### Supported Actions
 
