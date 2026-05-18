@@ -8,7 +8,7 @@ sidebar_position: 3
 This section outlines the guardrails and usage patterns that keep FTP tools safe for production. The main risks are broad path scope, overly permissive wildcard matching, oversized directory scans, and unsafe use of placeholders in paths or content.
 
 ## Guardrails & Path Scope
-The tool accepts Remote Path, Remote File Path, Local Path, and File Content. Treat any user-provided value as untrusted until your tool configuration validates it.
+The tool accepts Remote Path and File Content. Treat any user-provided value as untrusted until your tool configuration validates it.
 
 Keep operations inside approved source and destination roots. That matters most for:
 - `search` and `list`, which walk directory trees from a starting path.
@@ -27,8 +27,7 @@ Common examples:
 - `report-*.csv` matches files such as `report-daily.csv` or `report-2026-05.csv`.
 - `*` matches every file name, which is useful for discovery but should be avoided in production unless the directory is tightly scoped.
 
-Because the pattern is matched against the file name, not the full remote path, use a narrow `remote_path` when you need precise targeting and a narrow `pattern` when you need predictable results.
-
+The pattern only checks file names, not full folder paths. Use a specific Remote Path and a simple pattern to get more accurate results.
 ## Action-Specific Safety
 
 ### Search and List
@@ -80,7 +79,6 @@ Prefer patterns like `*.log` or `report-*.csv` over `*`. Use a narrow Remote Pat
 | Explicit Destinations | Keep write/upload/download targets precise. | Reduces accidental overwrites and delivery mistakes. |
 
 ## Protocol Limitations
-- FTP traffic is unencrypted. Use private networks, VPNs, or an SSH-based alternative when you need transport security.
 - Search patterns are matched against file names, so they are not a substitute for path allowlists.
 - Directory listings depend on FTP server LIST formats and may omit timestamps.
 - Very large files can exceed response size limits if returned inline.
