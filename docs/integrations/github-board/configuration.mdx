@@ -7,10 +7,6 @@ sidebar_position: 2
 
 Once the GitHub connection is validated, configuration defines how MCP Express exposes GitHub board operations as callable tools. Most actions require a project identifier and may optionally target items, issues, or draft entries depending on the tool.
 
-## Tool Orchestration
-
-GitHub Board uses an action-oriented model where each tool maps to a bounded project operation. Configuration should keep project scope explicit and expose only the runtime fields needed by that action.
-
 ## Action Configuration
 
 Use action configuration to define which project operation the tool performs and which parameters are resolved at runtime.
@@ -35,17 +31,17 @@ Use the following parameters according to the configured action.
 
 | Parameter      | Required | Description                                                                                            |
 | -------------- | -------- | ------------------------------------------------------------------------------------------------------ |
-| project_number | Some     | The GitHub Projects number. Required for most project-scoped actions.                                  |
-| item_id        | Some     | Unique identifier for a project item. Required for item-specific actions such as updates or retrieval. |
-| item_type      | Some     | Item type to create. Supported values are `draft` or `issue`.                                          |
-| title          | Some     | Title for a new project or item. Commonly required for create actions.                                 |
-| repo           | Some     | Repository name. Required when the action references an issue in a repository.                         |
-| body           | No       | Optional body or description for new draft items or project content.                                   |
-| first          | No       | Maximum number of items to return. Default is `20`; maximum is `100`.                                  |
+| Project number | Some     | The GitHub Projects number. Required for most project-scoped actions.                                  |
+| Item ID        | Some     | Unique identifier for a project item. Required for item-specific actions such as updates or retrieval. |
+| Item type      | Some     | Item type to create. Supported values are `draft` or `issue`.                                          |
+| Title          | Some     | Title for a new project or item. Commonly required for create actions.                                 |
+| Repo           | Some     | Repository name. Required when the action references an issue in a repository.                         |
+| Body           | No       | Optional body or description for new draft items or project content.                                   |
+| First          | No       | Maximum number of items to return. Default is `20`; maximum is `100`.                                  |
 
 ### Governance Controls
 
-Give only access to `project` when creating classic token. Do not reuse old token with extended permission or extend permission for this token. Use it strictly for mcp-express github board integration.
+Give only access to `project` scope when creating classic token. Do not reuse old token with extended permission or extend permission for this token. Use it strictly for mcp-express github board integration.
 
 :::tip Test Tool Contracts Before Deployment
 Use the built-in testing utility to verify key resolution (`{{ }}` substitution), required attribute presence, and permission behavior before production using it in you client.
