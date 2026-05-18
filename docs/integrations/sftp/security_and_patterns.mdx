@@ -8,28 +8,35 @@ sidebar_position: 3
 This section outlines the guardrails and usage patterns that keep SFTP tools safe for production. The main risks are broad path scope, overly permissive wildcard matching, oversized directory scans, and unsafe use of templated paths or content.
 
 ## Guardrails & Path Scope
-The connector accepts templated values for Remote Path, Remote File Path, Local Path, and File Content. Treat every runtime value as user-provided until you confirm it is safe and within approved locations.
+The tool accepts Remote Path, Remote File Path, Local Path, and File Content.
 
-Keep operations inside approved source and destination roots. That matters most for:
+Only use the folders you are allowed to access. That matters most for:
 - Search and List, which walk directory trees from a starting path.
 - Read, which pulls a single remote file into the model context.
 - Write, Upload, and Download, which can create or replace files when overwrite is enabled.
 
 :::danger Path Scope Must Be Enforced
-Unvalidated path templates can point the connector at unintended directories or files. Enforce allowlists, root-prefix checks, and input validation before allowing runtime substitution.
+Unvalidated path templates can point the tool at unintended directories or files. Enforce allowlists, root-prefix checks, and input validation before allowing runtime substitution.
 :::
 
 ## SFTP Pattern Semantics
-Search uses filename wildcards, not full-path regex. The `pattern` field is evaluated against each entry name under the chosen directory.
+Use filename wildcards only. The following pattern types are supported.
 
-Common examples:
-- `*.log` matches every file ending in `.log` in the current directory tree.
-- `report-*.csv` matches files such as `report-daily.csv` or `report-2026-05.csv`.
-- `*` matches every file name, which is useful for discovery but should be avoided in production unless the directory is tightly scoped.
+**Supported patterns**
+- `*.log`
+- `report-*.csv`
+- `invoices-2026-??.pdf`
+- `*`
+
+**Not supported**
+- `^report-.*\.csv$` (regex)
+- `**/*.log` (globstar)
+- `logs/(error|warn)-*.txt` (regex group)
+- `data/2026/[01-12]/report.csv` (regex-style range)
 
 Prefer patterns like `*.log` or `report-*.csv` over `*`.
 
-Because the pattern is matched against the file name, not the full remote path, use a narrow Remote Path when you need precise targeting and a narrow pattern when you need predictable results.
+Use a narrow Remote Path when you need precise targeting and a narrow pattern when you need predictable results.
 
 ## Action-Specific Safety
 
@@ -39,7 +46,7 @@ Search and list are the main discovery operations, so they should be bounded car
 - Keep patterns narrow so you do not scan unnecessary files.
 - Disable recursion unless the directory tree is known and stable.
 - Avoid listing hidden files unless your workflow explicitly needs them.
-- Recursive traversal is capped in the connector to prevent runaway scans.
+- Recursive traversal is capped in the tool to prevent runaway scans.
 
 ### Read
 Read is the simplest retrieval path, but it still needs content controls.
