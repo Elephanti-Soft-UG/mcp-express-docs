@@ -1,0 +1,8 @@
+{
+  "label": "GitHub Board",
+  "position": 8,
+  "link": {
+    "type": "doc",
+    "id": "integrations/github-board/index"
+  }
+}
