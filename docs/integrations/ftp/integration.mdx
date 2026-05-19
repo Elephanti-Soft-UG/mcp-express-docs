@@ -1,0 +1,32 @@
+---
+sidebar_label: Integration
+sidebar_position: 1
+---
+
+# FTP Integration
+
+Set up FTP access so MCP Express can sign in and reach the folders you want to work with.
+
+## Connection Parameters
+
+Configure the following fields to authorize access. Use a dedicated account with minimal privileges.
+
+| Parameter | Description | Required |
+| --- | --- | --- |
+| Hostname | FTP server hostname or IP address. | Yes |
+| Port | FTP port (Default: 21). | Optional |
+| Username | Account used to sign in. | Yes |
+| Password | Account password. | Yes |
+
+:::tip Network Access
+Ensure your MCP server can reach the FTP host on the configured port and that firewalls allow access.
+:::
+
+## Connection Validation
+
+When you test the connection, MCP Express checks that:
+- **Credentials Work**: The username and password are accepted.
+- **Login Succeeds**: The server allows a normal sign-in.
+- **Folder Access Works**: The account can see its default folder.
+
+If validation fails, the test output explains what went wrong so you can fix connectivity or permission issues.

@@ -1,0 +1,85 @@
+---
+sidebar_label: Security and Patterns
+sidebar_position: 3
+---
+
+# Security & Implementation Patterns
+
+This section outlines the guardrails and usage patterns that keep FTP tools safe for production. The main risks are broad path scope, overly permissive wildcard matching, oversized directory scans, and unsafe use of placeholders in paths or content.
+
+## Guardrails & Path Scope
+The tool accepts Remote Path and File Content. Treat any user-provided value as untrusted until your tool configuration validates it.
+
+Keep operations inside approved source and destination roots. That matters most for:
+- `search` and `list`, which walk directory trees from a starting path.
+- `read`, which pulls a single remote file into the model context.
+- `write`, `upload`, and `download`, which can create or replace files on the server or MCP host.
+
+:::danger Path Scope Must Be Enforced
+Unvalidated path templates can point the connector at unintended directories or files. Enforce allowlists, root-prefix checks, and input validation before allowing runtime substitution.
+:::
+
+## FTP Pattern Semantics
+The connector's search action uses filename pattern matching, not full-path regexes. The `pattern` field is evaluated with wildcard matching against each entry name under the chosen directory.
+
+Common examples:
+- `*.log` matches every file ending in `.log` in the current directory tree.
+- `report-*.csv` matches files such as `report-daily.csv` or `report-2026-05.csv`.
+- `*` matches every file name, which is useful for discovery but should be avoided in production unless the directory is tightly scoped.
+
+The pattern only checks file names, not full folder paths. Use a specific Remote Path and a simple pattern to get more accurate results.
+## Action-Specific Safety
+
+### Search and List
+Search and list are the main discovery operations, so they should be bounded carefully.
+- Use Max Results to keep result sets small and predictable.
+- Keep patterns narrow so you do not scan unnecessary files.
+- Disable recursion unless the directory tree is known and stable.
+- Avoid listing hidden files unless your workflow explicitly needs them.
+- Recursive traversal is capped to prevent runaway scans.
+
+### Read
+Read is the simplest retrieval path, but it still needs content controls.
+- Prefer Encoding set to auto for mixed text files.
+- Use Encoding set to text when you know the file is textual.
+- Use Encoding set to binary when the file is not text and you want encoded output instead of a decode failure.
+
+### Write, Upload, and Download
+These actions are where overwrites and destination selection matter most.
+- Keep destination paths explicit and avoid broad placeholders.
+- Use placeholders only for the variable part of a path, not the entire destination root.
+- FTP servers commonly replace files on write or upload. Use Overwrite only when replacement is safe.
+- Separate generation, staging, and final delivery paths so accidental replacement is easier to detect.
+
+## FTP Pattern Semantics
+Use filename wildcards only. The following pattern types are supported.
+
+**Supported patterns**
+- `*.log`
+- `report-*.csv`
+- `invoices-2026-??.pdf`
+- `*`
+
+**Not supported**
+- `^report-.*\.csv$` (regex)
+- `**/*.log` (globstar)
+- `logs/(error|warn)-*.txt` (regex group)
+- `data/2026/[01-12]/report.csv` (regex-style range)
+
+Prefer patterns like `*.log` or `report-*.csv` over `*`. Use a narrow Remote Path when you need precise targeting.
+
+## Performance Optimization
+
+| Pattern | Description | Benefit |
+| --- | --- | --- |
+| Bounded Results | Keep Max Results conservative for Search and List. | Prevents oversized responses. |
+| Targeted Patterns | Prefer patterns like `*.log` or `report-*.csv` over `*`. | Reduces unnecessary file matches. |
+| Limited Recursion | Only enable recursion when the directory tree is known. | Avoids runaway traversal and slow scans. |
+| Encoding Choices | Use the right encoding mode for each file type. | Prevents decode errors and unnecessary encoded output. |
+| Explicit Destinations | Keep write/upload/download targets precise. | Reduces accidental overwrites and delivery mistakes. |
+
+## Protocol Limitations
+- Search patterns are matched against file names, so they are not a substitute for path allowlists.
+- Directory listings depend on FTP server LIST formats and may omit timestamps.
+- Very large files can exceed response size limits if returned inline.
+- Recursive directory traversal is intentionally capped to avoid runaway scans.

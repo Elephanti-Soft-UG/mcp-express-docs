@@ -1,0 +1,48 @@
+---
+sidebar_label: Configuration
+sidebar_position: 2
+---
+
+# Configuration
+
+Once FTP access is validated, configuration defines how MCP Express exposes FTP file operations as callable tools. Most actions require a Remote Path and may optionally include filters or file content depending on the tool.
+
+## Tool Orchestration
+FTP uses an action-oriented model where each tool maps to a bounded file operation. Configuration should keep path scope explicit and expose only the runtime fields needed by that action.
+
+## Action Configuration
+Use action configuration to define which file operation the tool performs and which parameters are resolved at runtime. Paths and file content can include placeholders like `/data/{{ year }}/{{ month }}/report.csv`.
+
+### Supported Actions
+
+The following actions are supported by the FTP integration:
+
+- **Search**: Find files that match a wildcard pattern under a directory.
+- **Read**: Read the contents of a specific remote file.
+- **Write**: Create or update a remote file with provided content.
+- **Upload**: Send a file to the remote server.
+- **Download**: Fetch a remote file for downstream processing.
+- **List**: List files and directories under a remote path.
+
+## Common Runtime Parameters
+
+Use the following parameters according to the configured action.
+
+| Parameter | Required | Description |
+| --- | --- | --- |
+| Action | Yes | The operation to run: `search`, `list`, `read`, `write`, `upload`, or `download`. |
+| Remote Path | Some | Directory to search or list. Required for `search` and `list`. Also used to target a file for `read`, `write`, `upload`, or `download`. |
+| File Content | Some | Content to write for `write`. |
+| Pattern | No | Wildcard match for `search` (e.g., `*.log`). |
+| Recursive | No | Enable subdirectory traversal for `search` or `list`. |
+| Include Hidden | No | Include dotfiles when listing. |
+| Max Results | No | Cap the number of returned items. Defaults: `search` 100, `list` 1000. |
+| Encoding | No | Read mode for `read`: `auto`, `text`, or `binary`. |
+| Overwrite | No | Overwrite existing files for `write`, `upload`, or `download`. |
+
+### Governance Controls
+Limit tools to approved base directories and avoid broad patterns in production. Keep write, upload, and download targets explicit so content is only placed where you expect it.
+
+:::tip Test Tool Contracts Before Deployment
+Use the built-in testing utility to verify placeholder resolution, required field behavior, and permissions before enabling tools in production.
+:::
