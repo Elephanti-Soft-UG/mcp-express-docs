@@ -5,30 +5,34 @@ sidebar_position: 1
 
 # MongoDB Integration
 
-To interface MCP Express with a MongoDB cluster, define the connection parameters and validate access. The handshake verifies credentials and provides collection metadata needed for tool creation.
+Configure MongoDB connectivity so MCP Express can authenticate, confirm database access, and prepare collection-aware tools. This sets the trust boundary for read and write operations.
 
 ## Connection Parameters
 
 Configure the following fields using a dedicated database user with the minimum permissions required.
 
 | Parameter | Technical Description | Required |
-|---|---|---|
+| --- | --- | --- |
 | Host | MongoDB host or cluster endpoint. | Yes |
 | Port | MongoDB port (Default: 27017). | Optional |
 | Database Name | Database scope for the integration. | Yes |
-| Username | Auth user for the database. | Optional |
-| Password | Password for the database user. | Optional |
+| Username | Database user name. | Yes |
+| Password | Password for the database user. | Yes |
 
 :::warning Required Permissions
-Ensure the database user has permissions for the collections and actions you plan to expose as tools.
+Ensure the database user can access only the collections and actions you plan to expose.
 :::
 
-## Handshake & Collection Discovery
+:::tip Network Access
+Ensure the MCP server can reach the MongoDB host on the configured port and that any firewall or network rules allow access.
+:::
 
-When you click Next, MCP Express validates the connection and prepares integration metadata:
+## Connection Validation
 
-- **Connection Test**: Verifies host, port, and credentials.
-- **Database Stats**: Confirms the target database is reachable.
-- **Collection Discovery**: Enumerates collections to power configuration workflows.
+When you test the connection, MCP Express performs the following checks:
 
-If validation fails, MCP Express returns a detailed error to help troubleshoot the connection.
+- **Credential Verification**: Confirms the username and password.
+- **Database Reachability**: Verifies the target database is accessible.
+- **Collection Access**: Checks that collections are visible for configuration.
+
+If validation fails, the test output shows what went wrong so you can fix connection or access issues.
