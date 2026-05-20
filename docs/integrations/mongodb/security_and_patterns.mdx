@@ -8,7 +8,6 @@ sidebar_position: 3
 This section outlines the guardrails and usage patterns that keep MongoDB tools safe for production. The main risks are overly broad filters, unbounded updates or deletes, and large result sets that return too much data.
 
 ## Guardrails & Collection Scope
-Treat any user-provided filter, update, or projection as untrusted until your configuration validates it.
 
 Keep operations inside approved databases and collections. That matters most for:
 - **Find and Count**, which can scan large data sets.
