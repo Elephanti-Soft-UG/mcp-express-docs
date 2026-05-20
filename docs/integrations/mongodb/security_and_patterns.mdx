@@ -28,6 +28,16 @@ Recommended practices:
 - Require `$set`-only updates when you want to prevent document replacement.
 - Avoid `$where` or unbounded logical conditions unless you control the inputs.
 
+## Fully Dynamic AI Queries
+The special `{{query}}` argument allows the AI to generate the full MongoDB filter or pipeline at runtime from natural language. This is useful when you do not have a fixed tool for a one-off question, but it increases risk because the AI controls the entire query shape.
+
+Use case example:
+If a user asks, "Show the 10 newest paid orders from enterprise customers," the AI can build a filtered query with a sort and a limit without a pre-defined tool.
+
+:::warning Security Risks of Dynamic Queries
+Using `{{query}}` gives the AI broad control over filters and pipeline stages. Only enable it with strict collection allowlists, key allowlists, and a database role that limits reads and writes.
+:::
+
 ## Action-Specific Safety
 
 ### Find and Count
