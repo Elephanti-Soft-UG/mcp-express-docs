@@ -1,0 +1,44 @@
+---
+sidebar_label: Configuration
+sidebar_position: 2
+---
+
+# Configuration
+
+Once the Grafana connection is validated, configuration defines how MCP Express exposes alerting operations as callable tools. Each action requires the base connection parameters and may require additional action-specific parameters at runtime.
+
+## Action Configuration
+
+Use action configuration to define which alerting operation the tool performs and which parameters are resolved at runtime.
+
+### Supported Actions
+
+The following actions are supported by the Grafana integration:
+
+- **List Alert Rules**: List all configured Grafana alert rules.
+- **Get Firing Alerts**: Retrieve currently firing alerts, with optional label filters.
+- **List Silences**: List all configured alerting silences.
+- **Create Silence**: Create a new silence for a specific alert rule.
+- **Delete Silence**: Delete an existing silence by ID.
+
+## Common Runtime Parameters
+
+Use the following parameters according to the configured action:
+
+| Parameter        | Required | Description                                                                  |
+| ---------------- | -------- | ---------------------------------------------------------------------------- |
+| `alert_rule_uid` | Some     | The UID of the alert rule. Required for `Create Silence`.                    |
+| `id`             | Some     | The silence ID. Required for `Delete Silence`.                               |
+| `created_by`     | Some     | User or team identifier creating the silence. Required for `Create Silence`. |
+| `comment`        | Some     | Reason for the silence. Required for `Create Silence`.                       |
+
+### Governance Controls
+
+When configuring actions:
+
+- Restrict `Create Silence` and `Delete Silence` actions to approved operators only.
+- Validate all silence parameters before execution.
+
+:::tip Test Tool Contracts Before Deployment
+Use the built-in testing utility to verify required attribute presence, parameter types, and permission behavior before production use.
+:::
