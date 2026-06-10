@@ -95,6 +95,26 @@ For reference, see the official guide: [Add users to a property](https://support
 Viewer access is sufficient for all actions in this integration. It allows reading reports but does not permit editing property settings, goals, or audiences.
 :::
 
+:::note Service account email rejected by GA4 UI?
+If the **Add users** dialog shows an error saying the email does not match a Google account, GA4 is unable to resolve the service account email through its normal user lookup. This is a known limitation when adding Google Cloud service accounts via the GA4 Admin UI.
+
+**Workaround — use the Google Analytics Admin API directly:**
+
+1. Open the [GA4 Admin API Explorer — accessBindings.create](https://developers.google.com/analytics/devguides/config/admin/v1/rest/v1alpha/properties.accessBindings/create).
+2. Make sure you are signed into the correct Google account that owns the GA4 property.
+3. In the **parent** field on the right, enter your property in the format `properties/123456789`.
+   You can find your Property ID in GA4 under **Admin → Property → Property details**.
+4. In the **Request body** field, enter:
+   ```json
+   {
+     "user": "your-service-account@your-project-id.iam.gserviceaccount.com",
+     "roles": ["predefinedRoles/viewer"]
+   }
+   ```
+5. Click **Execute**. If prompted, sign in and grant consent on the OAuth screen.
+6. A `200` response confirms the service account now has Viewer access on the property.
+   :::
+
 ### Step 6 — Find Your GA4 Property ID
 
 1. In Google Analytics, go to **Admin → Property Settings** (under the Property column).
