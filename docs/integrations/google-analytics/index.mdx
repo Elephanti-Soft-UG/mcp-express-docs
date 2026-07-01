@@ -1,21 +1,169 @@
-import DocCardList from '@theme/DocCardList'
-
 # Google Analytics Integration
 
-The Google Analytics integration allows MCP Express to interact with your GA4 setup. It supports a wide range of reporting actions — from active users and traffic sources to real-time visitors and conversion analysis — all authenticated through a Google service account.
+Connecting MCP Express to GA4 lets your AI assistant pull live analytics data directly: audience reports, traffic breakdowns, real-time visitors, event analytics, and conversion summaries without manually copying dashboards or exporting CSVs.
 
-## Capabilities
+This integration uses a Google service account, which is a non-human identity that authenticates on your behalf.
 
-- **Audience Reporting**: Retrieve active users, new users, and session data across custom date ranges.
-- **Traffic & Acquisition Analysis**: Break down traffic by source, medium, and channel group to understand how users find your site.
-- **Real-Time Monitoring**: Query live visitor counts, active screens, and device breakdowns without any date range constraints.
-- **Event & Conversion Tracking**: Analyze top events, conversion counts, and user engagement across your GA4 property.
-- **Demographic & Device Insights**: Segment your audience by country, city, language, device type, OS, and browser.
-- **Date Range Comparison**: Compare two time periods side by side for sessions, active users, page views, and conversions.
-- **Service Account Authentication**: Connect securely using a Google service account JSON key with read-only access to your GA4 property.
+## Setup Steps (Do This First)
 
-## Technical Resources
+Follow these in order. Most setup issues happen when one step is skipped.
 
-Use the following modules to configure connection details, action behavior, and security patterns for Google Analytics.
+### Step 1: Set up a Google Cloud project
 
-<DocCardList />
+Why this matters: Google requires all API access to run through a Cloud project.
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/).
+2. In the top navigation bar, click the project selector dropdown.
+   ![Google Cloud save/select project flow](/resources/integrations/google-analytics/google_cloud_console_save_project_section.webp)
+3. Click **New Project** if needed, or select an existing project.
+   ![Google Cloud project selector and create project flow](/resources/integrations/google-analytics/google_cloud_console_new_project_section.webp)
+
+:::note
+If your team already has a Cloud project for data services, use that project to keep billing and IAM centralized.
+:::
+
+### Step 2: Enable the Google Analytics Data API
+
+Why this matters: MCP Express uses this API to read GA4 reports.
+
+1. In Google Cloud Console, open the left navigation menu.
+2. Go to **APIs & Services -> Library**.
+
+   ![APIs and Services section in Google Cloud Console](/resources/integrations/google-analytics/google_cloud_console_api_and_services_tab.webp)
+
+3. Search for **Google Analytics Data API**.
+   ![Search for Google Analytics Data API](/resources/integrations/google-analytics/google_cloud_console_search_bar.webp)
+4. Open it and click **Enable**.
+   ![Google Analytics Data API result page](/resources/integrations/google-analytics/google_analytics_data_api_section.webp)
+
+### Step 3: Create a service account
+
+Why this matters: MCP Express uses this account to authenticate without your personal Google login.
+
+1. Open the left navigation menu.
+2. Go to **IAM & Admin -> Service Accounts**.
+   ![IAM and Service Accounts in Google Cloud Console](/resources/integrations/google-analytics/google_cloud_sonsole_iam_section.webp)
+3. Click **Create Service Account**.
+   ![Create a new service account](/resources/integrations/google-analytics/google_cloud_console_create_service_account.webp)
+4. Name it something clear like `mcp-express-analytics`.
+5. Click **Create and Continue**.
+6. Skip project role assignment.
+7. Click **Done**.
+
+### Step 4: Download the JSON key
+
+Why this matters: This key file is the credential MCP Express needs.
+
+1. Open the service account you created.
+2. Go to the **Keys** tab.
+   ![Service account keys tab](/resources/integrations/google-analytics/google_cloud_console_service_account_keys.webp)
+3. Click **Add Key -> Create new key**. 4. Choose **JSON** and click **Create**. 5. Save the downloaded file securely.
+   ![Create a new JSON key](/resources/integrations/google-analytics/google_cloud_console_create_new_key.webp)
+
+:::danger Protect this file
+Treat the JSON key as a password. If it is exposed, delete the key in Google Cloud and create a new one immediately.
+:::
+
+### Step 5: Grant service account access in GA4
+
+Why this matters: Creating a service account in Google Cloud does not automatically grant GA4 property access.
+
+1. Go to [Google Analytics](https://analytics.google.com) and open your GA4 property.
+2. Click **Admin** (bottom-left).
+   ![GA4 property access management](/resources/integrations/google-analytics/ga4-property-access-management.webp)
+3. Go to **Property Access Management**.
+4. Click **+ -> Add users**.
+   ![GA4 add user dialog](/resources/integrations/google-analytics/ga4-add-user.webp)
+5. Add the service account email.
+6. Set role to **Viewer**.
+7. Click **Add**.
+
+:::tip
+Viewer is sufficient. Do not grant Editor or Administrator roles.
+:::
+
+If the GA4 UI rejects the service account email, use the GA4 Admin API workaround:
+
+1. Open [GA4 Admin API Explorer - accessBindings.create](https://developers.google.com/analytics/devguides/config/admin/v1/rest/v1alpha/properties.accessBindings/create).
+2. Set `parent` to `properties/YOUR_PROPERTY_ID`.
+3. Use this request body:
+
+```json
+{
+  "user": "your-service-account@your-project-id.iam.gserviceaccount.com",
+  "roles": ["predefinedRoles/viewer"]
+}
+```
+
+4. Click **Execute**. A `200` response confirms access was added.
+
+### Step 6: Find your GA4 Property ID
+
+1. In GA4, go to **Admin -> Property Settings**.
+2. Copy the **Property ID** (numbers only, for example `123456789`).
+
+:::note
+Do not use the Measurement ID (`G-...`). You need the numeric Property ID.
+:::
+
+### Step 7: Connect in MCP Express
+
+1. Open the Google Analytics integration in MCP Express.
+2. Paste the full JSON content into **Service Account JSON**.
+3. Enter your **Property ID**.
+4. Choose the action(s) your AI should be allowed to call.
+5. Give the tool a distinct name so your AI can route requests correctly.
+
+## Connection Parameters
+
+| Parameter            | Description                                                                                        | Required |
+| -------------------- | -------------------------------------------------------------------------------------------------- | -------- |
+| Service Account JSON | Full content of your downloaded service account JSON key.                                          | Yes      |
+| Property ID          | GA4 property identifier. Use plain numeric ID (for example `123456789`) or `properties/123456789`. | Yes      |
+
+## Verify the Connection
+
+Run **Get Realtime Users** first. It does not require a date range and is the fastest validation check.
+
+If you get a permission or access error, check the following:
+
+- The same service account email was added in GA4 Property Access Management.
+- The Google Analytics Data API is enabled in the correct Google Cloud project.
+- The JSON key belongs to the same service account you granted GA4 access.
+- The Property ID points to the intended GA4 property.
+
+## Supported Actions
+
+- **Get Active Users**: Daily sessions, active users, and new users.
+- **Get Top Pages**: Most visited pages with page views and engagement.
+- **Get Traffic Sources**: Channel/source/medium performance.
+- **Get Realtime Users**: Live active users and active screens/pages.
+- **Get Top Events**: Most frequent GA4 events.
+- **Get User Demographics**: Country, city, or language breakdown.
+- **Get Device Breakdown**: Device category, OS, and browser mix.
+- **Get Landing Pages**: Session-entry pages with session quality metrics.
+- **Get Conversions**: Conversion events and conversion-driving channels.
+- **Compare Date Ranges**: Period-over-period comparison.
+
+## Security Checklist
+
+- Assign only **Viewer** role in GA4.
+- Use one service account per integration where possible.
+- Store JSON credentials in a secrets vault, not in source control.
+- Rotate service account keys on a schedule.
+- Revoke and replace any key immediately if exposed.
+- Keep result limits bounded for actions that support limits.
+
+## Known Limitations
+
+- This integration is read-only and cannot modify GA4 configuration.
+- Real-time reports are for current activity, not historical analysis.
+- Some demographics (especially city-level) can be sparse in low-traffic properties.
+- Historical data exists only from when GA4 tracking was installed.
+
+## What You Can Ask After Connecting
+
+- "What are my top traffic sources this week?"
+- "How many users converted on the pricing page yesterday?"
+- "Show me real-time visitors right now."
+- "Compare this month's sessions to last month."
