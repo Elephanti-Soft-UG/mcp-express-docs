@@ -3,6 +3,12 @@ on:
     push:
         branches:
             - main
+    # Fired by mcp-express-connectors' generate_registry.yaml after it publishes
+    # an updated integrations registry to S3 from a push to its main branch, so
+    # this site's build always reflects the latest registry/documentation.
+    repository_dispatch:
+        types:
+            - connectors-registry-updated
 jobs:
     build:
         name: Build Docusaurus
