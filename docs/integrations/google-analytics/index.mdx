@@ -1,3 +1,6 @@
+---
+sidebar_label: "Google Analytics"
+---
 # Google Analytics Integration
 
 Connecting MCP Express to GA4 lets your AI assistant pull live analytics data directly: audience reports, traffic breakdowns, real-time visitors, event analytics, and conversion summaries without manually copying dashboards or exporting CSVs.
@@ -14,9 +17,9 @@ Why this matters: Google requires all API access to run through a Cloud project.
 
 1. Go to [Google Cloud Console](https://console.cloud.google.com/).
 2. In the top navigation bar, click the project selector dropdown.
-   ![Google Cloud save/select project flow](/resources/integrations/google-analytics/google_cloud_console_save_project_section.webp)
+   ![Google Cloud save/select project flow](https://mcp-express-connectors-registry.s3.eu-central-1.amazonaws.com/integrations/images/google-analytics/google_cloud_console_save_project_section.webp)
 3. Click **New Project** if needed, or select an existing project.
-   ![Google Cloud project selector and create project flow](/resources/integrations/google-analytics/google_cloud_console_new_project_section.webp)
+   ![Google Cloud project selector and create project flow](https://mcp-express-connectors-registry.s3.eu-central-1.amazonaws.com/integrations/images/google-analytics/google_cloud_console_new_project_section.webp)
 
 :::note
 If your team already has a Cloud project for data services, use that project to keep billing and IAM centralized.
@@ -29,12 +32,12 @@ Why this matters: MCP Express uses this API to read GA4 reports.
 1. In Google Cloud Console, open the left navigation menu.
 2. Go to **APIs & Services -> Library**.
 
-   ![APIs and Services section in Google Cloud Console](/resources/integrations/google-analytics/google_cloud_console_api_and_services_tab.webp)
+   ![APIs and Services section in Google Cloud Console](https://mcp-express-connectors-registry.s3.eu-central-1.amazonaws.com/integrations/images/google-analytics/google_cloud_console_api_and_services_tab.webp)
 
 3. Search for **Google Analytics Data API**.
-   ![Search for Google Analytics Data API](/resources/integrations/google-analytics/google_cloud_console_search_bar.webp)
+   ![Search for Google Analytics Data API](https://mcp-express-connectors-registry.s3.eu-central-1.amazonaws.com/integrations/images/google-analytics/google_cloud_console_search_bar.webp)
 4. Open it and click **Enable**.
-   ![Google Analytics Data API result page](/resources/integrations/google-analytics/google_analytics_data_api_section.webp)
+   ![Google Analytics Data API result page](https://mcp-express-connectors-registry.s3.eu-central-1.amazonaws.com/integrations/images/google-analytics/google_analytics_data_api_section.webp)
 
 ### Step 3: Create a service account
 
@@ -42,9 +45,9 @@ Why this matters: MCP Express uses this account to authenticate without your per
 
 1. Open the left navigation menu.
 2. Go to **IAM & Admin -> Service Accounts**.
-   ![IAM and Service Accounts in Google Cloud Console](/resources/integrations/google-analytics/google_cloud_sonsole_iam_section.webp)
+   ![IAM and Service Accounts in Google Cloud Console](https://mcp-express-connectors-registry.s3.eu-central-1.amazonaws.com/integrations/images/google-analytics/google_cloud_sonsole_iam_section.webp)
 3. Click **Create Service Account**.
-   ![Create a new service account](/resources/integrations/google-analytics/google_cloud_console_create_service_account.webp)
+   ![Create a new service account](https://mcp-express-connectors-registry.s3.eu-central-1.amazonaws.com/integrations/images/google-analytics/google_cloud_console_create_service_account.webp)
 4. Name it something clear like `mcp-express-analytics`.
 5. Click **Create and Continue**.
 6. Skip project role assignment.
@@ -56,9 +59,9 @@ Why this matters: This key file is the credential MCP Express needs.
 
 1. Open the service account you created.
 2. Go to the **Keys** tab.
-   ![Service account keys tab](/resources/integrations/google-analytics/google_cloud_console_service_account_keys.webp)
+   ![Service account keys tab](https://mcp-express-connectors-registry.s3.eu-central-1.amazonaws.com/integrations/images/google-analytics/google_cloud_console_service_account_keys.webp)
 3. Click **Add Key -> Create new key**. 4. Choose **JSON** and click **Create**. 5. Save the downloaded file securely.
-   ![Create a new JSON key](/resources/integrations/google-analytics/google_cloud_console_create_new_key.webp)
+   ![Create a new JSON key](https://mcp-express-connectors-registry.s3.eu-central-1.amazonaws.com/integrations/images/google-analytics/google_cloud_console_create_new_key.webp)
 
 :::danger Protect this file
 Treat the JSON key as a password. If it is exposed, delete the key in Google Cloud and create a new one immediately.
@@ -70,10 +73,10 @@ Why this matters: Creating a service account in Google Cloud does not automatica
 
 1. Go to [Google Analytics](https://analytics.google.com) and open your GA4 property.
 2. Click **Admin** (bottom-left).
-   ![GA4 property access management](/resources/integrations/google-analytics/ga4-property-access-management.webp)
+   ![GA4 property access management](https://mcp-express-connectors-registry.s3.eu-central-1.amazonaws.com/integrations/images/google-analytics/ga4-property-access-management.webp)
 3. Go to **Property Access Management**.
 4. Click **+ -> Add users**.
-   ![GA4 add user dialog](/resources/integrations/google-analytics/ga4-add-user.webp)
+   ![GA4 add user dialog](https://mcp-express-connectors-registry.s3.eu-central-1.amazonaws.com/integrations/images/google-analytics/ga4-add-user.webp)
 5. Add the service account email.
 6. Set role to **Viewer**.
 7. Click **Add**.

@@ -1,4 +1,6 @@
-import DocCardList from '@theme/DocCardList';
+---
+sidebar_label: "SFTP"
+---
 
 # SFTP Integration
 
@@ -8,6 +10,163 @@ The SFTP integration connects MCP Express to secure file servers over SSH, enabl
 - **Remote File Operations**: Search, list, read, write, upload, and download files on SFTP servers.
 - **Connection Validation**: Verify connectivity and credentials before activating tools.
 
-## Technical Resources
-The following modules detail the lifecycle of your SFTP integration:
-<DocCardList />
+
+## Integration
+
+Configure SFTP connectivity so MCP Express can establish a secure SSH session, validate credentials, and prepare file operations. This sets the trust boundary for read and write access on your remote server.
+
+### Connection Parameters
+
+Configure the following fields to authorize the MCP server. Use a dedicated service account with minimal privileges to maintain strict data governance.
+
+| Parameter | Technical Description | Required |
+| --- | --- | --- |
+| Hostname | SFTP server hostname or IP address. Accepts `hostname` or `host`. | Yes |
+| Port | SSH port for SFTP (Default: 22). | Optional |
+| Username | Account used to authenticate to the server. | Yes |
+| Password | Password-based authentication. | Yes (alternatively with private key) |
+| Private Key | Private key-based authentication | Yes (alternatively with password) |
+
+:::warning Authentication Requirement
+You must provide either `password` or `private_key`.
+:::
+
+:::tip Network Access
+Ensure the MCP server can reach the SFTP host on the configured port and that firewalls allow inbound SSH access.
+:::
+
+### Connection Validation
+
+When you test the connection, MCP Express performs the following checks:
+- **Credential Verification**: Confirms the username and authentication method.
+- **Handshake Validation**: Verifies SSH negotiation and session setup.
+
+If validation fails, the test output shows what went wrong so you can fix connection or access issues.
+
+
+## Configuration
+
+Once the SFTP connection is validated, configuration defines how MCP Express exposes SFTP file operations as callable tools. Most actions require a remote path and may optionally include filters, file content, or local destinations depending on the tool.
+
+### Tool Orchestration
+SFTP uses an action-oriented model where each tool maps to a bounded file operation. Configuration should keep path scope explicit and expose only the runtime fields needed by that action.
+
+### Action Configuration
+Use action configuration to define which file operation the tool performs and which parameters are resolved at runtime.
+
+#### Supported Actions
+
+The following actions are supported by the SFTP integration:
+
+- **Search**: Find files that match a wildcard pattern under a directory.
+- **Read**: Read the contents of a specific remote file.
+- **Write**: Create or update a remote file with provided content.
+- **Upload**: Send a local file to the remote server.
+- **Download**: Fetch a remote file to the MCP server host.
+- **List**: List files and directories under a remote path.
+
+### Common Runtime Parameters
+
+Use the following parameters according to the configured action.
+
+| Parameter | Required | Description |
+| --- | --- | --- |
+| Action | Yes | The operation to run: `search`, `list`, `read`, `write`, `upload`, or `download`. |
+| Remote Path | Some | Directory to search or list. Required for `search` and `list`. |
+| Remote Path (File) | Some | Remote file path for `read`, `write`, `upload`, or `download`. |
+| Local Path | Some | Local file path for `upload` and `download` (on the MCP server host). |
+| File Content | Some | Content to write for `write`. |
+| Pattern | No | Wildcard match for `search` (e.g., `*.log`). |
+| Recursive | No | Enable subdirectory traversal for `search` or `list`. |
+| Include Hidden | No | Include dotfiles when listing. |
+| Max Results | No | Cap the number of returned items. Defaults: `search` 100, `list` 1000. |
+| Encoding | No | Read mode for `read`: `auto`, `text`, or `binary`. |
+| Overwrite | No | Overwrite existing files for `write`, `upload`, or `download`. |
+
+#### Governance Controls
+Limit tools to approved base directories and avoid broad patterns in production. Keep write, upload, and download targets explicit so content is only placed where you expect it.
+
+:::tip Test Tool Contracts Before Deployment
+Use the built-in testing utility to verify path resolution (`{{ }}` substitution), required field behavior, and permissions before enabling tools in production.
+:::
+
+
+## Security & Patterns
+
+This section outlines the guardrails and usage patterns that keep SFTP tools safe for production. The main risks are broad path scope, overly permissive wildcard matching, oversized directory scans, and unsafe use of templated paths or content.
+
+### Guardrails & Path Scope
+The tool accepts Remote Path, Local Path, and File Content.
+
+Only use the folders you are allowed to access. That matters most for:
+- Search and List, which walk directory trees from a starting path.
+- Read, which pulls a single remote file into the model context.
+- Write, Upload, and Download, which can create or replace files when overwrite is enabled.
+
+:::danger Path Scope Must Be Enforced
+Unvalidated runtime path can point the tool at unintended directories or files. Enforce allowlists, root-prefix checks, and input validation before allowing runtime substitution.
+:::
+
+### SFTP Pattern Semantics
+Use filename wildcards only. The following pattern types are supported.
+
+**Supported patterns**
+- `*.log`
+- `report-*.csv`
+- `invoices-2026-??.pdf`
+- `*`
+
+**Not supported**
+- `^report-.*\.csv$` (regex)
+- `**/*.log` (globstar)
+- `logs/(error|warn)-*.txt` (regex group)
+- `data/2026/[01-12]/report.csv` (regex-style range)
+
+Prefer patterns like `*.log` or `report-*.csv` over `*`.
+
+Use a narrow Remote Path when you need precise targeting and a narrow pattern when you need predictable results.
+
+### Action-Specific Safety
+
+#### Search and List
+Search and list are the main discovery operations, so they should be bounded carefully.
+- Use Max Results to keep result sets small and predictable.
+- Keep patterns narrow so you do not scan unnecessary files.
+- Disable recursion unless the directory tree is known and stable.
+- Avoid listing hidden files unless your workflow explicitly needs them.
+- Recursive traversal is capped in the tool to prevent runaway scans.
+
+#### Read
+Read is the simplest retrieval path, but it still needs content controls.
+- Prefer Encoding set to auto for mixed text files.
+- Use Encoding set to text when you know the file is textual.
+- Use Encoding set to binary when the file is not text and you want base64 output instead of a decode failure.
+
+#### Write, Upload, and Download
+These actions are where overwrites and destination selection matter most.
+- Keep destination paths explicit and avoid broad templated targets.
+- Leave Overwrite disabled when you need immutable delivery semantics.
+- Use templates only for the variable part of a path, not the entire destination root.
+- Separate generation, staging, and final delivery paths so accidental replacement is easier to detect.
+
+### Performance Optimization
+#### Bounded Results
+Keep Max Results conservative for Search and List to prevent oversized responses.
+
+#### Targeted Patterns
+Prefer patterns like `*.log` or `report-*.csv` over `*` to reduce unnecessary file matches.
+
+#### Limited Recursion
+Only enable recursion when the directory tree is known and stable to avoid runaway traversal.
+
+#### Encoding Choices
+Use the right encoding mode for each file type to prevent decode errors and unnecessary base64 output.
+
+#### Explicit Destinations
+Keep write, upload, and download targets precise to reduce accidental overwrites and delivery mistakes.
+
+### Protocol Limitations
+- Search patterns are matched against file names, so they are not a substitute for path allowlists.
+- Binary content is returned as base64 when Encoding is set to binary or when auto-detection fails.
+- Very large files can exceed response size limits if returned inline.
+- Recursive directory traversal is intentionally capped to avoid runaway scans.

@@ -1,0 +1,8 @@
+{
+  "label": "SQL Server",
+  "position": 13,
+  "link": {
+    "type": "doc",
+    "id": "integrations/sql-server/index"
+  }
+}

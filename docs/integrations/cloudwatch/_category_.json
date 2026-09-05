@@ -1,6 +1,6 @@
 {
   "label": "CloudWatch",
-  "position": 7,
+  "position": 31,
   "link": {
     "type": "doc",
     "id": "integrations/cloudwatch/index"

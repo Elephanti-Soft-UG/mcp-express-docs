@@ -13,7 +13,11 @@ const config: Config = {
   baseUrl: '/',
   organizationName: 'Elephanti Soft UG',
   projectName: 'mcp-express-docs',
-  onBrokenLinks: 'throw',
+  // Integration doc pages are fetched from S3 at build time (see
+  // scripts/fetch-integrations.mjs) and may legitimately be absent if the
+  // registry hasn't been (re)published yet, or a given integration has no
+  // documentation. Don't let that external data gap fail the whole build.
+  onBrokenLinks: 'warn',
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],

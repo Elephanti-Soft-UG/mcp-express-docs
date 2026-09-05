@@ -18,6 +18,9 @@ jobs:
             - name: Install dependencies
               run: npm ci
             - name: Build website
+              env:
+                  INTEGRATIONS_S3_BUCKET: ${{ secrets.INTEGRATIONS_S3_BUCKET }}
+                  AWS_REGION: ${{ vars.AWS_REGION || 'eu-central-1' }}
               run: npm run build
 
             - name: Upload Build Artifact
