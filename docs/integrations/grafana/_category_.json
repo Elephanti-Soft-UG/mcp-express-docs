@@ -1,6 +1,6 @@
 {
   "label": "Grafana",
-  "position": 10,
+  "position": 11,
   "link": {
     "type": "doc",
     "id": "integrations/grafana/index"

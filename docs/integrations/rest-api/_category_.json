@@ -1,0 +1,8 @@
+{
+  "label": "Rest API",
+  "position": 28,
+  "link": {
+    "type": "doc",
+    "id": "integrations/rest-api/index"
+  }
+}

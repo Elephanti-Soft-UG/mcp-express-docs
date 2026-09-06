@@ -1,4 +1,6 @@
-import DocCardList from '@theme/DocCardList'
+---
+sidebar_label: "GitHub Board"
+---
 
 # GitHub Board Integration
 
@@ -11,8 +13,136 @@ The GitHub Board integration allows MCP Express to read, create, and manage GitH
 - **Scoped Ownership Controls**: Bind each integration to a specific GitHub owner and owner type so board access stays predictable.
 - **PAT-Based Authentication**: Use a classic Personal Access Token (PAT) with only the `project` permission enabled for secure board access.
 
-## Technical Resources
 
-Use the following modules to configure connection details, action behavior, and security patterns for GitHub Board.
+## Integration
 
-<DocCardList />
+To connect MCP Express to GitHub Board, configure authentication and project ownership scope before enabling board management tools. This integration provides secure access to view, create, and manage GitHub project boards and items for a user or organization, using a Personal Access Token (PAT) for authentication.
+
+Once connected, you can automate project workflows, manage issues and draft items, and keep board operations scoped to the configured owner context.
+
+### Connection Parameters
+
+| Parameter    | Technical Description                                                                                                                                          | Required |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| Github token | GitHub Personal Access Token used to authenticate github board request. **This integration requires a classic token (fine-grained tokens are not supported).** | Yes      |
+| Owner type   | Project owner classification. Accepted values are `user` or `organization`.                                                                                    | Yes      |
+| Owner        | For `Owner type` `user`, this is your GitHub username. For `Owner type` `organization`, this is the organization name.                                         | Yes      |
+
+:::info
+**Classic Token Required:**
+You must create a new Personal Access Token of type **Tokens (classic)** with the `project` permission enabled. Fine-grained tokens are not supported for this integration.
+:::
+
+:::tip
+**Best Practice:**
+Use a dedicated classic token for this integration only. Do not reuse old tokens or grant more permissions than necessary—enable only the `project` permission.
+:::
+
+### Generate a GitHub Personal Access Token
+
+Create a PAT before configuring the integration:
+
+:::note
+If you cannot follow the instructions below for any reason, refer to the official documentation: [Managing your personal access tokens (classic)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#personal-access-tokens-classic).
+:::
+
+1. Go to [GitHub token settings](https://github.com/settings/tokens) and choose **Generate new token**.
+2. Select **Tokens (classic)**.
+3. Add a note to refer to this token later.
+4. Set the **Expiration** according to your requirements (e.g., 30, 60, or 90 days).
+5. Under **Select scopes**, check the `project` scope.
+6. Click **Generate token** at the bottom of the page.
+7. Copy the generated token and use it for the `Github Token` field in your mcp-express tool.
+
+
+## Configuration
+
+Once the GitHub connection is validated, configuration defines how MCP Express exposes GitHub board operations as callable tools. Most actions require a project identifier and may optionally target items, issues, or draft entries depending on the tool.
+
+### Action Configuration
+
+Use action configuration to define which project operation the tool performs and which parameters are resolved at runtime.
+
+#### Supported Actions
+
+The following actions are supported by the GitHub Board integration:
+
+- **Archive Item**: Archive an item in a project board.
+- **Create Item**: Create a new item in a project board.
+- **Create Project**: Create a new project board.
+- **Delete Item**: Delete an item from a project board.
+- **Get Item Details**: Retrieve details for a specific item in a project board.
+- **Get Project**: Retrieve details for a specific project board.
+- **List Items**: List items in a project board.
+- **List Projects**: List all project boards for the owner.
+- **Update Item Status**: Update the status of an item in a project board.
+
+### Common Runtime Parameters
+
+Use the following parameters according to the configured action.
+
+| Parameter      | Required | Description                                                                                            |
+| -------------- | -------- | ------------------------------------------------------------------------------------------------------ |
+| Project number | Some     | The GitHub Projects number. Required for most project-scoped actions.                                  |
+| Item ID        | Some     | Unique identifier for a project item. Required for item-specific actions such as updates or retrieval. |
+| Item type      | Some     | Item type to create. Supported values are `draft` or `issue`.                                          |
+| Title          | Some     | Title for a new project or item. Commonly required for create actions.                                 |
+| Repo           | Some     | Repository name. Required when the action references an issue in a repository.                         |
+| Body           | No       | Optional body or description for new draft items or project content.                                   |
+| First          | No       | Maximum number of items to return. Default is `20`; maximum is `100`.                                  |
+
+#### Governance Controls
+
+Give only access to `project` scope when creating classic token. Do not reuse old token with extended permission or extend permission for this token. Use it strictly for mcp-express github board integration.
+
+:::tip Test Tool Contracts Before Deployment
+Use the built-in testing utility to verify key resolution (`{{ }}` substitution), required attribute presence, and permission behavior before production using it in you client.
+:::
+
+
+## Security & Patterns
+
+Use these controls to run GitHub Board-backed MCP tools safely in production. The primary goals are to keep board access scoped, minimize PAT exposure, and prevent the model from performing unintended project mutations.
+
+### Guardrails & Restricted Operations
+
+Restrict each tool to approved owners, project numbers, repositories, and action types. Avoid exposing broad project discovery or unrestricted write access when the use case only needs focused board operations.
+
+:::danger Dynamic Execution Risk
+Allowing unconstrained runtime selection of operations, such as delete item, create item or create project can lead to unintended data mutation. Enforce allowlists for operations or simply don't enable these tool in mcp-express if you don't intend to use them.
+:::
+
+### Fully Dynamic AI Operations
+
+Dynamic board workflows can let the model choose projects, items, repositories, or create content at runtime. This improves flexibility but increases the risk of unintended issue linking, noisy project updates, or access beyond the intended operational boundary.
+
+Scope distinction:
+
+- **Templated Runtime Values**: A fixed project workflow accepts bounded inputs such as `title`, `body`, or `first`.
+- **Fully Dynamic Operations**: The model can decide which project, repository, or item operation to execute at runtime.
+
+:::warning Avoid Unconstrained Write Operation in Production
+Only enable dynamic create or update paths when owner scope, project allowlists, repository boundaries are all enforced.
+:::
+
+### Data Governance & Scopes
+
+- Use a classic PAT with only the `project` scope enabled.
+- Separate read-only board tools from write-capable item or issue workflows to keep audits and approvals clear.
+- Constrain `first` to operationally safe values and validate project or item identifiers before execution.
+
+### Performance Optimization
+
+- **Fixed Owner Context**: Keep `Owner` and `Owner type` constant per integration instance.  
+  _Benefit: Reduces API ambiguity and simplifies authorization checks._
+- **Bounded Pagination**: Limit `first` to the smallest useful item count.  
+  _Benefit: Improves latency and avoids oversized result payloads._
+
+### Protocol Limitations
+
+- GitHub Board integration behavior depends on the permissions granted to the PAT.
+- Organization-owned project access may fail unless the PAT owner is a collaborator in the organization.
+
+### References
+
+- [GitHub PAT Documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#personal-access-tokens-classic)

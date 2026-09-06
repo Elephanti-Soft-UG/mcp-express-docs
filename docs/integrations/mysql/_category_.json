@@ -1,6 +1,6 @@
 {
   "label": "MySQL",
-  "position": 3,
+  "position": 9,
   "link": {
     "type": "doc",
     "id": "integrations/mysql/index"

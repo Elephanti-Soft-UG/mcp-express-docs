@@ -1,8 +1,6 @@
 ---
-sidebar_label: Confluence
-sidebar_position: 8
+sidebar_label: "Atlassian"
 ---
-
 # Confluence Integration Guide
 
 The **Confluence Tool** integrates with Confluence, a collaboration software developed by Atlassian, allowing you to automate workflows, search for pages, read content, and create or update pages directly from the MCP-Express platform. This integration enhances productivity by streamlining interactions with Confluence content and automating content management.
@@ -43,7 +41,7 @@ The Confluence Tool uses **OAuth 2.0** for secure authentication, allowing seaml
 - **Automatic Authentication**:
   Once authenticated, the tool will handle the connection automatically, so you don’t have to manually enter any credentials.
 
-![Confluence Authentication](/resources/integrations/confluence/confluence-auth.png)
+![Confluence Authentication](https://mcp-express-connectors-registry.s3.eu-central-1.amazonaws.com/integrations/images/atlassian/confluence-auth.png)
 
 ## Subtools
 
@@ -69,7 +67,7 @@ The Search Tool uses Confluence Query Language (CQL) for powerful content filter
   type:page AND title:"API"
   ```
 
-  ![Confluence Search Config](/resources/integrations/confluence/confluence-search-config.png)
+  ![Confluence Search Config](https://mcp-express-connectors-registry.s3.eu-central-1.amazonaws.com/integrations/images/atlassian/confluence-search-config.png)
 
 ### Read Tool
 
@@ -89,7 +87,7 @@ The **Read Tool** allows you to retrieve the content of a specific Confluence pa
   Read the content of page with ID: 12345
   ```
 
-  ![Confluence Read Config](/resources/integrations/confluence/confluence-read-config.png)
+  ![Confluence Read Config](https://mcp-express-connectors-registry.s3.eu-central-1.amazonaws.com/integrations/images/atlassian/confluence-read-config.png)
 
 ### Write Tool
 
@@ -114,7 +112,7 @@ The **Write Tool** allows you to create or update pages in Confluence.
   page_content: "Detailed information about the new API features."
   ```
 
-  ![Confluence Read Config](/resources/integrations/confluence/confluence-write-config.png)
+  ![Confluence Read Config](https://mcp-express-connectors-registry.s3.eu-central-1.amazonaws.com/integrations/images/atlassian/confluence-write-config.png)
 
 ## Templates for Dynamic Values
 
@@ -134,7 +132,7 @@ For the **Search Tool**, dynamic values allow you to build a flexible search que
 type:page AND title:"{{page_title}}"
 ```
 
-![Confluence Search Config](/resources/integrations/confluence/confluence-dynamic-search-config-1.png)
+![Confluence Search Config](https://mcp-express-connectors-registry.s3.eu-central-1.amazonaws.com/integrations/images/atlassian/confluence-dynamic-search-config-1.png)
 
 Here:
 
@@ -146,7 +144,7 @@ Another example:
 type:page AND space:"{{space_key}}" AND title:"{{page_title}}"
 ```
 
-![Confluence Search Config](/resources/integrations/confluence/confluence-dynamic-search-config-2.png)
+![Confluence Search Config](https://mcp-express-connectors-registry.s3.eu-central-1.amazonaws.com/integrations/images/atlassian/confluence-dynamic-search-config-2.png)
 
 Here:
 
@@ -163,7 +161,7 @@ For the **Read Tool**, dynamic values are used to retrieve content from specific
 "{{page_id}}"
 ```
 
-![Confluence Read Config](/resources/integrations/confluence/confluence-dynamic-read-config.png)
+![Confluence Read Config](https://mcp-express-connectors-registry.s3.eu-central-1.amazonaws.com/integrations/images/atlassian/confluence-dynamic-read-config.png)
 
 Here:
 
@@ -191,7 +189,7 @@ Here:
 - `{{page_content}}` will be replaced with the content the user inputs for the page.
 - `{{parent_id}}` will be replaced with the parent page's ID if the page is being nested under another page.
 
-![Confluence Write Config](/resources/integrations/confluence/confluence-dynamic-write-config.png)
+![Confluence Write Config](https://mcp-express-connectors-registry.s3.eu-central-1.amazonaws.com/integrations/images/atlassian/confluence-dynamic-write-config.png)
 
 For example, if a user wants to create a page with the title "API Documentation" in the "dev" space, the tool will dynamically insert those values into the configuration.
 

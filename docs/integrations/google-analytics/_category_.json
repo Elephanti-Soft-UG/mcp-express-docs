@@ -1,6 +1,6 @@
 {
   "label": "Google Analytics",
-  "position": 9,
+  "position": 22,
   "link": {
     "type": "doc",
     "id": "integrations/google-analytics/index"

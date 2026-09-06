@@ -1,4 +1,6 @@
-import DocCardList from '@theme/DocCardList'
+---
+sidebar_label: "Grafana"
+---
 
 # Grafana Integration
 
@@ -11,8 +13,137 @@ The Grafana integration allows MCP Express to run Grafana alerting actions so no
 - **Silence Management**: List, create, and delete alerting silences.
 - **Secure Token Authentication**: Use a Grafana service account token for authentication.
 
-## Technical Resources
 
-Use the following modules to configure connection details, action payloads, and operating guidance for Grafana alerting workflows.
+## Integration
 
-<DocCardList />
+To connect MCP Express to Grafana, configure authentication and alerting permissions before enabling alert management tools. This integration provides secure access to list alert rules, inspect firing alerts, and manage silences using a Grafana service account token.
+
+Once connected, you can automate alert monitoring and silence workflows, keeping all operations scoped to the configured Grafana instance.
+
+### Connection Parameters
+
+| Parameter     | Technical Description                                                                                                   | Required |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------- | -------- |
+| Grafana URL   | Base URL for your Grafana instance.                                                                                     | Yes      |
+| Grafana Token | Grafana service account token used to authenticate API requests. **This integration requires a service account token.** | Yes      |
+
+:::info
+**Service Account Required:**
+You must create a dedicated Grafana service account with alerting permissions enabled. Personal user tokens are not recommended for production automation.
+:::
+
+:::tip
+**Best Practice:**
+Use a dedicated service account for this integration only. Grant only alerting permissions and rotate tokens regularly.
+:::
+
+### Create a Grafana Service Account Token
+
+Create a dedicated service account and token before configuring MCP Express:
+
+:::note
+If your Grafana UI differs from the steps below, refer to the official documentation: [Service accounts](https://grafana.com/docs/grafana/latest/administration/service-accounts/).
+:::
+
+1. In Grafana, go to **Administration** > **Users and access** > **Service accounts**.
+2. Select **New service account**.
+3. Enter a name such as `mcp-express-alerting` and save.
+4. Assign the alerting permission to this service account.
+5. Open the service account and create a token.
+6. Copy the generated token and use it for the `Grafana Token` field in your mcp-express configuration.
+
+
+## Configuration
+
+Once the Grafana connection is validated, configuration defines how MCP Express exposes alerting operations as callable tools. Each action requires the base connection parameters and may require additional action-specific parameters at runtime.
+
+### Action Configuration
+
+Use action configuration to define which alerting operation the tool performs and which parameters are resolved at runtime.
+
+#### Supported Actions
+
+The following actions are supported by the Grafana integration:
+
+- **List Alert Rules**: List all configured Grafana alert rules.
+- **Get Firing Alerts**: Retrieve currently firing alerts, with optional label filters.
+- **List Silences**: List all configured alerting silences.
+- **Create Silence**: Create a new silence for a specific alert rule.
+- **Delete Silence**: Delete an existing silence by ID.
+
+### Common Runtime Parameters
+
+Use the following parameters according to the configured action:
+
+| Parameter        | Required | Description                                                                  |
+| ---------------- | -------- | ---------------------------------------------------------------------------- |
+| `alert_rule_uid` | Some     | The UID of the alert rule. Required for `Create Silence`.                    |
+| `id`             | Some     | The silence ID. Required for `Delete Silence`.                               |
+| `created_by`     | Some     | User or team identifier creating the silence. Required for `Create Silence`. |
+| `comment`        | Some     | Reason for the silence. Required for `Create Silence`.                       |
+
+#### Governance Controls
+
+When configuring actions:
+
+- Restrict `Create Silence` and `Delete Silence` actions to approved operators only.
+- Validate all silence parameters before execution.
+
+:::tip Test Tool Contracts Before Deployment
+Use the built-in testing utility to verify required attribute presence, parameter types, and permission behavior before production use.
+:::
+
+
+## Security & Patterns
+
+Use these controls to run Grafana alerting actions safely in production. The primary goals are to keep alerting access scoped, minimize token exposure, and prevent unintended silence mutations.
+
+### Guardrails & Restricted Operations
+
+Restrict each tool to approved actions and alert rule scopes. Avoid exposing unrestricted silence creation or deletion when use cases only need focused alerting visibility.
+
+:::danger Dynamic Execution Risk
+Allowing unconstrained runtime selection of operations such as `Create silence` or `Delete Silence` can lead to unintended alert silences or alert gaps. Enforce allowlists for operations or disable these tools if not required.
+:::
+
+### Fully Dynamic AI Operations
+
+Dynamic alert workflows can let the model choose which silences to create, which alerts to filter, or which rules to inspect at runtime. This improves flexibility but increases risk of unintended silences, alert fatigue, or access beyond intended operational boundaries.
+
+:::warning Avoid Unconstrained Write Operation in Production
+Only enable dynamic silence operations when action allowlists, duration caps, and approval workflows are all enforced.
+:::
+
+### Token Handling
+
+- Treat `Grafana Token` as a secret. Never share it in tickets, chats, screenshots, or prompts.
+- Store tokens in secure secret storage and rotate them on a schedule.
+- Use dedicated service account tokens for MCP Express only.
+- Use a dedicated service account with alerting-only permissions.
+- Do not use personal user tokens for production automation.
+- Immediately revoke any token you suspect is exposed.
+
+### Operational Patterns
+
+- **Short Silence Durations**: Keep silence durations short and always include a clear `comment` explaining why.
+- **Identify Silence Creators**: Use `created_by` values that clearly identify your on-call team or runbook identity.
+- **Regular Audits**: Review active silences regularly using `List silence` to ensure no orphaned silences.
+- **Alert Rule Review**: Periodically review active alert rules using `List alert rule` to keep your alerting strategy current.
+
+### Data Governance & Scopes
+
+- Use a service account token with only alerting permissions enabled.
+- Separate read-only alert visibility tools from write-capable silence workflows to keep audits clear.
+- Validate alert rule UIDs and silence IDs before execution.
+
+### Common Setup Risks
+
+- **Token authentication failures**: Invalid, expired, revoked, or under-scoped tokens cause authentication failures.
+- **Missing or wrong field types**: Missing required fields or incorrect field types result in validation errors.
+- **Permission gaps**: Service account missing alerting permissions will fail on alert operations.
+
+### References
+
+- [Grafana service accounts](https://grafana.com/docs/grafana/latest/administration/service-accounts/)
+- [Assign roles to a service account](https://grafana.com/docs/grafana/latest/administration/service-accounts/#assign-roles-to-a-service-account-in-grafana)
+- [Grafana Alerting documentation](https://grafana.com/docs/grafana/latest/alerting/)

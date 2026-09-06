@@ -1,6 +1,6 @@
 {
-  "label": "DynamoDB",
-  "position": 6,
+  "label": "Amazon DynamoDB",
+  "position": 7,
   "link": {
     "type": "doc",
     "id": "integrations/dynamodb/index"
